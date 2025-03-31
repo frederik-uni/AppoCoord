@@ -4,7 +4,7 @@ package com.frederik.appocoord;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class Api {
     @PostMapping("/greet")
     public String greetUser(@RequestBody String name) {
