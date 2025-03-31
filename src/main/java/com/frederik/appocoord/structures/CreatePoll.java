@@ -1,6 +1,7 @@
 package com.frederik.appocoord.structures;
 
 
+import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.Poll;
 import org.springframework.lang.NonNull;
 
@@ -36,11 +37,12 @@ public class CreatePoll extends PollInfo {
         this.available_times = available_times;
     }
 
-    public Poll toPoll() {
+    public Poll toPoll(RedisService redisService) {
         var timeInfo = new ArrayList<TimeUserCollection>();
         if (!this.available_times.isEmpty()) {
             timeInfo.add(new TimeUserCollection(this.uploader, this.available_times));
         }
-        return new Poll(this.title, this.description, this.location, timeInfo, this.uploader.getFingerprint());
+        String id = redisService.createIf(this.uploader.getFingerprint(), this.uploader);
+        return new Poll(this.title, this.description, this.location, timeInfo, id);
     }
 }

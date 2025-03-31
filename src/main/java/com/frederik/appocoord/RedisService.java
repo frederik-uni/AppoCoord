@@ -23,4 +23,12 @@ public class RedisService {
     public Object getData(String id) {
         return redisTemplate.opsForValue().get(id);
     }
+
+    public String createIf(String id, Object data) {
+        if (!Boolean.TRUE.equals(redisTemplate.hasKey(id))) {
+            redisTemplate.opsForValue().set(id, data);
+        }
+        return id;
+
+    }
 }

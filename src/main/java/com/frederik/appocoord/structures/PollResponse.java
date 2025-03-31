@@ -1,5 +1,7 @@
 package com.frederik.appocoord.structures;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.Poll;
 import org.springframework.lang.NonNull;
 
@@ -8,10 +10,18 @@ import java.util.ArrayList;
 public class PollResponse extends Poll {
     @NonNull
     private String id;
+    @JsonIgnore
+    private final RedisService redisService;
 
-    public PollResponse(@NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator, @NonNull String id) {
+    public PollResponse(RedisService redisService, @NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator, @NonNull String id) {
         super(title, description, location, users, creator);
         this.id = id;
+        this.redisService = redisService;
+    }
+
+    @NonNull
+    public User getCreator() {
+        return (User) this.redisService.getData(getCreatorId());
     }
 
     @NonNull

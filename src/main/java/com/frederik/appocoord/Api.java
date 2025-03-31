@@ -17,19 +17,19 @@ public class Api {
     private RedisService redisService;
     @PostMapping("/create")
     public PollResponse create(@RequestBody CreatePoll data) {
-        String id = redisService.saveData(data.toPoll());
+        String id = redisService.saveData(data.toPoll(this.redisService));
         Poll db_data = (Poll) redisService.getData(id);
-        return new PollResponse(db_data.getTitle(), db_data.getDescription(), db_data.getLocation(), db_data.getUsers(), db_data.getCreator(), id);
+        return db_data.getResponse(redisService, id);
     }
 
     @GetMapping("/info/{id}")
     public PollResponse info(@PathVariable String id) {
         Poll db_data = (Poll) redisService.getData(id);
-        return new PollResponse(db_data.getTitle(), db_data.getDescription(), db_data.getLocation(), db_data.getUsers(), db_data.getCreator(), id);
+        return db_data.getResponse(redisService, id);
     }
 
     @PostMapping("/reply/{id}")
     public PollResponse getUserById(@PathVariable String id, @RequestBody TimeUserCollection data) {
-        return new PollResponse("title", null, null, new ArrayList<>(), "", id);
+        return new PollResponse(null, "title", null, null, new ArrayList<>(), "", id);
     }
 }
