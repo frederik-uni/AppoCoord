@@ -15,11 +15,11 @@ public class Api {
 
     @GetMapping("/info/{id}")
     public PollResponse info(@PathVariable String id) {
-        return new PollResponse("title", null, null, "id", new ArrayList<>());
+        return new PollResponse("title", null, null, id, new ArrayList<>());
     }
 
-    @GetMapping("/user/{id}")
-    public String getUserById(@PathVariable int id) {
-        return "User ID: " + id;
+    @PostMapping("/reply/{id}")
+    public PollResponse getUserById(@PathVariable String id, @RequestBody TimeUserCollection data) {
+        return new PollResponse("title", null, null, id, new ArrayList<>());
     }
 }
