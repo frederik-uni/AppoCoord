@@ -29,7 +29,6 @@ public class TimeUserCollection implements Serializable {
 
     @NonNull
     public User getUser() {
-        System.out.println(redisService);
         return (User) redisService.getData(this.user_id);
     }
 

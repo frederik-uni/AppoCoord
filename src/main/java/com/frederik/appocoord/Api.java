@@ -4,7 +4,7 @@ package com.frederik.appocoord;
 import com.frederik.appocoord.models.Poll;
 import com.frederik.appocoord.structures.CreatePollRequest;
 import com.frederik.appocoord.structures.PollResponse;
-import com.frederik.appocoord.models.parts.TimeUserCollection;
+import com.frederik.appocoord.structures.ReplyPollRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +28,11 @@ public class Api {
     }
 
     @PostMapping("/reply/{id}")
-    public PollResponse getUserById(@PathVariable String id, @RequestBody TimeUserCollection data) {
+    public PollResponse getUserById(@PathVariable String id, @RequestBody ReplyPollRequest data) {
         Poll db_data = (Poll) redisService.getData(id);
-        db_data.addTimeUserCollection(data);
+        db_data.addTimeUserCollection(redisService, data);
         redisService.createOrUpdate(id, db_data);
+
         return db_data.getResponse(redisService, id);
     }
 }

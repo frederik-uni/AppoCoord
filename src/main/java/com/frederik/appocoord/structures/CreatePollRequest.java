@@ -42,7 +42,7 @@ public class CreatePollRequest extends PollInfo {
 
     public Poll toPoll(RedisService redisService) {
         var timeInfo = new ArrayList<TimeUserCollection>();
-        String id = redisService.createIf(this.uploader.getFingerprint(), this.uploader);
+        String id = redisService.createIf(this.uploader.getFingerprintInternal(), this.uploader);
         if (!this.available_times.isEmpty()) {
             timeInfo.add(new TimeUserCollection(redisService, id, this.available_times));
         }

@@ -5,6 +5,7 @@ import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.parts.PollInfo;
 import com.frederik.appocoord.models.parts.TimeUserCollection;
 import com.frederik.appocoord.structures.PollResponse;
+import com.frederik.appocoord.structures.ReplyPollRequest;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
@@ -28,9 +29,10 @@ public class Poll extends PollInfo implements Serializable {
     }
 
     @JsonIgnore
-    public void addTimeUserCollection(TimeUserCollection data) {
-        this.users.stream().filter(user -> !user.getUserId().equals(data.getUserId())).collect(Collectors.toCollection(ArrayList::new));
-        this.users.add(data);
+    public void addTimeUserCollection(RedisService redisService, ReplyPollRequest data) {
+        String id = redisService.createIf(data.getUser().getFingerprintInternal(), data.getUser());
+        this.users.stream().filter(user -> !user.getUserId().equals(id)).collect(Collectors.toCollection(ArrayList::new));
+        this.users.add(new TimeUserCollection(redisService, id, data.getTimeInfo()));
     }
 
     public void setCreator(@NonNull String creator) {

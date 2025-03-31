@@ -1,5 +1,6 @@
 package com.frederik.appocoord.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
@@ -20,6 +21,12 @@ public class User implements Serializable {
     @NonNull
     public String getFingerprint() {
         return "";
+    }
+
+    @NonNull
+    @JsonIgnore
+    public String getFingerprintInternal() {
+        return this.fingerprint;
     }
 
     public void setFingerprint(@NonNull String fingerprint) {
