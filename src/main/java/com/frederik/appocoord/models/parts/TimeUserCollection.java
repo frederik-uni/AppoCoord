@@ -1,7 +1,8 @@
-package com.frederik.appocoord.structures;
+package com.frederik.appocoord.models.parts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.frederik.appocoord.RedisService;
+import com.frederik.appocoord.models.User;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
@@ -26,11 +27,13 @@ public class TimeUserCollection implements Serializable {
         return user_id;
     }
 
+    @NonNull
     public User getUser() {
         System.out.println(redisService);
         return (User) redisService.getData(this.user_id);
     }
 
+    @JsonIgnore
     public void setRedis(RedisService redisService) {
         this.redisService = redisService;
     }

@@ -3,6 +3,8 @@ package com.frederik.appocoord.structures;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.Poll;
+import com.frederik.appocoord.models.parts.TimeUserCollection;
+import com.frederik.appocoord.models.User;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;

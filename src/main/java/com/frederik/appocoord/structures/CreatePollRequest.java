@@ -2,18 +2,21 @@ package com.frederik.appocoord.structures;
 
 
 import com.frederik.appocoord.RedisService;
-import com.frederik.appocoord.models.Poll;
+import com.frederik.appocoord.models.*;
+import com.frederik.appocoord.models.parts.PollInfo;
+import com.frederik.appocoord.models.parts.TimeInfo;
+import com.frederik.appocoord.models.parts.TimeUserCollection;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 
-public class CreatePoll extends PollInfo {
+public class CreatePollRequest extends PollInfo {
     @NonNull
     private User uploader;
     @NonNull
     private ArrayList<TimeInfo> available_times;
 
-    public CreatePoll(@NonNull String title, String description, String location, @NonNull User uploader, @NonNull ArrayList<TimeInfo> available_times) {
+    public CreatePollRequest(@NonNull String title, String description, String location, @NonNull User uploader, @NonNull ArrayList<TimeInfo> available_times) {
         super(title, description, location);
         this.uploader = uploader;
         this.available_times = available_times;

@@ -2,9 +2,9 @@ package com.frederik.appocoord;
 
 
 import com.frederik.appocoord.models.Poll;
-import com.frederik.appocoord.structures.CreatePoll;
+import com.frederik.appocoord.structures.CreatePollRequest;
 import com.frederik.appocoord.structures.PollResponse;
-import com.frederik.appocoord.structures.TimeUserCollection;
+import com.frederik.appocoord.models.parts.TimeUserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ public class Api {
     private RedisService redisService;
 
     @PostMapping("/create")
-    public PollResponse create(@RequestBody CreatePoll data) {
+    public PollResponse create(@RequestBody CreatePollRequest data) {
         String id = redisService.saveData(data.toPoll(this.redisService));
         Poll db_data = (Poll) redisService.getData(id);
         return db_data.getResponse(redisService, id);

@@ -2,9 +2,9 @@ package com.frederik.appocoord.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.frederik.appocoord.RedisService;
-import com.frederik.appocoord.structures.PollInfo;
+import com.frederik.appocoord.models.parts.PollInfo;
+import com.frederik.appocoord.models.parts.TimeUserCollection;
 import com.frederik.appocoord.structures.PollResponse;
-import com.frederik.appocoord.structures.TimeUserCollection;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
@@ -15,6 +15,7 @@ public class Poll extends PollInfo implements Serializable {
     @NonNull
     private ArrayList<TimeUserCollection> users;
     @NonNull private String creator;
+
     public Poll(@NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator) {
         super(title, description, location);
         this.users = users;

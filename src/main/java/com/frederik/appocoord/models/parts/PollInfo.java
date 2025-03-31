@@ -1,4 +1,4 @@
-package com.frederik.appocoord.structures;
+package com.frederik.appocoord.models.parts;
 
 import org.springframework.lang.NonNull;
 
