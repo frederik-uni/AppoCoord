@@ -5,4 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9090:9090"
+    depends_on:
+      - redis
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
     #restart: unless-stopped
