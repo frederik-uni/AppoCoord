@@ -19,7 +19,7 @@ public class User implements Serializable {
 
     @NonNull
     public String getFingerprint() {
-        return fingerprint;
+        return "";
     }
 
     public void setFingerprint(@NonNull String fingerprint) {
