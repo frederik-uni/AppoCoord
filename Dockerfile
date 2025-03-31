@@ -2,7 +2,6 @@ FROM maven:3.9.9-amazoncorretto-24-alpine AS build
 WORKDIR /app
 
 COPY pom.xml /app
-COPY application.properties /app
 COPY .mvn /app/.mvn
 COPY src /app/src
 
@@ -15,4 +14,4 @@ COPY application.properties /app
 
 EXPOSE 9090
 
-ENTRYPOINT ["java", "-jar", "/app/server.jar"]
+ENTRYPOINT ["java", "-jar", "/app/server.jar", "--spring.config.location=file:/app/application.properties"]
