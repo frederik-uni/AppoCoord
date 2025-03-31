@@ -8,13 +8,12 @@ import com.frederik.appocoord.structures.TimeUserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("")
 public class Api {
     @Autowired
     private RedisService redisService;
+
     @PostMapping("/create")
     public PollResponse create(@RequestBody CreatePoll data) {
         String id = redisService.saveData(data.toPoll(this.redisService));
@@ -30,6 +29,9 @@ public class Api {
 
     @PostMapping("/reply/{id}")
     public PollResponse getUserById(@PathVariable String id, @RequestBody TimeUserCollection data) {
-        return new PollResponse(null, "title", null, null, new ArrayList<>(), "", id);
+        Poll db_data = (Poll) redisService.getData(id);
+        db_data.addTimeUserCollection(data);
+        redisService.createOrUpdate(id, db_data);
+        return db_data.getResponse(redisService, id);
     }
 }

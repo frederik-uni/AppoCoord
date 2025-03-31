@@ -5,11 +5,11 @@ import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.structures.PollInfo;
 import com.frederik.appocoord.structures.PollResponse;
 import com.frederik.appocoord.structures.TimeUserCollection;
-import com.frederik.appocoord.structures.User;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Poll extends PollInfo implements Serializable {
     @NonNull
@@ -24,6 +24,12 @@ public class Poll extends PollInfo implements Serializable {
     @JsonIgnore
     public String getCreatorId() {
         return this.creator;
+    }
+
+    @JsonIgnore
+    public void addTimeUserCollection(TimeUserCollection data) {
+        this.users.stream().filter(user -> !user.getUserId().equals(data.getUserId())).collect(Collectors.toCollection(ArrayList::new));
+        this.users.add(data);
     }
 
     public void setCreator(@NonNull String creator) {

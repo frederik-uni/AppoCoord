@@ -29,6 +29,10 @@ public class RedisService {
             redisTemplate.opsForValue().set(id, data);
         }
         return id;
+    }
 
+    public String createOrUpdate(String id, Object data) {
+        redisTemplate.opsForValue().set(id, data);
+        return id;
     }
 }
