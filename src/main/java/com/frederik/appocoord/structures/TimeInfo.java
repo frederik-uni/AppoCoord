@@ -1,8 +1,8 @@
-package com.frederik.appocoord;
+package com.frederik.appocoord.structures;
 
-import org.springframework.lang.NonNull;
+import java.io.Serializable;
 
-public class TimeInfo {
+public class TimeInfo implements Serializable  {
     private long start;
     private long end;
 

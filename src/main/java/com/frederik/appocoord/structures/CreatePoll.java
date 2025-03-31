@@ -1,6 +1,7 @@
-package com.frederik.appocoord;
+package com.frederik.appocoord.structures;
 
 
+import com.frederik.appocoord.models.Poll;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -33,5 +34,13 @@ public class CreatePoll extends PollInfo {
 
     public void setAvailable_times(@NonNull ArrayList<TimeInfo> available_times) {
         this.available_times = available_times;
+    }
+
+    public Poll toPoll() {
+        var timeInfo = new ArrayList<TimeUserCollection>();
+        if (!this.available_times.isEmpty()) {
+            timeInfo.add(new TimeUserCollection(this.uploader, this.available_times));
+        }
+        return new Poll(this.title, this.description, this.location, timeInfo, this.uploader.getFingerprint());
     }
 }

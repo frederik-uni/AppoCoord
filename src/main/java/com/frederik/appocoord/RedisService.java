@@ -1,0 +1,26 @@
+package com.frederik.appocoord;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+public class RedisService {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    public String saveData(Object data) {
+        String id = UUID.randomUUID().toString();
+
+        redisTemplate.opsForValue().set(id, data);
+
+        return id;
+    }
+
+    public Object getData(String id) {
+        return redisTemplate.opsForValue().get(id);
+    }
+}

@@ -1,8 +1,10 @@
-package com.frederik.appocoord;
+package com.frederik.appocoord.structures;
 
 import org.springframework.lang.NonNull;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     @NonNull private String fingerprint;
     @NonNull
     private String name;

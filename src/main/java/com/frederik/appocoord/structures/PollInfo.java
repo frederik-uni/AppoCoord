@@ -1,10 +1,10 @@
-package com.frederik.appocoord;
+package com.frederik.appocoord.structures;
 
 import org.springframework.lang.NonNull;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class PollInfo {
+public class PollInfo implements Serializable  {
     @NonNull
     protected String title;
     protected String description;
