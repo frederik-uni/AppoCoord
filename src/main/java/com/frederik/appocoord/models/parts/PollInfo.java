@@ -4,7 +4,7 @@ import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
-public class PollInfo implements Serializable  {
+public class PollInfo implements Serializable {
     @NonNull
     protected String title;
     protected String description;

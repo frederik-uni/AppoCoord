@@ -2,7 +2,8 @@ package com.frederik.appocoord.structures;
 
 
 import com.frederik.appocoord.RedisService;
-import com.frederik.appocoord.models.*;
+import com.frederik.appocoord.models.Poll;
+import com.frederik.appocoord.models.User;
 import com.frederik.appocoord.models.parts.PollInfo;
 import com.frederik.appocoord.models.parts.TimeInfo;
 import com.frederik.appocoord.models.parts.TimeUserCollection;

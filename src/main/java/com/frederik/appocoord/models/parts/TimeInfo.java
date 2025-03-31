@@ -2,7 +2,7 @@ package com.frederik.appocoord.models.parts;
 
 import java.io.Serializable;
 
-public class TimeInfo implements Serializable  {
+public class TimeInfo implements Serializable {
     private long start;
     private long end;
 

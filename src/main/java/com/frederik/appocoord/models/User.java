@@ -6,7 +6,8 @@ import org.springframework.lang.NonNull;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    @NonNull private String fingerprint;
+    @NonNull
+    private String fingerprint;
     @NonNull
     private String name;
     @NonNull
@@ -23,14 +24,14 @@ public class User implements Serializable {
         return "";
     }
 
+    public void setFingerprint(@NonNull String fingerprint) {
+        this.fingerprint = fingerprint;
+    }
+
     @NonNull
     @JsonIgnore
     public String getFingerprintInternal() {
         return this.fingerprint;
-    }
-
-    public void setFingerprint(@NonNull String fingerprint) {
-        this.fingerprint = fingerprint;
     }
 
     @NonNull

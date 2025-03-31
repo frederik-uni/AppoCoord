@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 public class Poll extends PollInfo implements Serializable {
     @NonNull
     private ArrayList<TimeUserCollection> users;
-    @NonNull private String creator;
+    @NonNull
+    private String creator;
 
     public Poll(@NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator) {
         super(title, description, location);

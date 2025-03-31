@@ -27,6 +27,11 @@ public class TimeUserCollection implements Serializable {
         return user_id;
     }
 
+    @JsonIgnore
+    public void setUserId(@NonNull String user_id) {
+        this.user_id = user_id;
+    }
+
     @NonNull
     public User getUser() {
         return (User) redisService.getData(this.user_id);
@@ -37,17 +42,12 @@ public class TimeUserCollection implements Serializable {
         this.redisService = redisService;
     }
 
-    @JsonIgnore
-    public void setUserId(@NonNull String user_id) {
-        this.user_id = user_id;
-    }
-
     @NonNull
-    public  ArrayList<TimeInfo> getTimeInfo() {
+    public ArrayList<TimeInfo> getTimeInfo() {
         return timeInfo;
     }
 
-    public void setTimeInfo(@NonNull  ArrayList<TimeInfo> timeInfo) {
+    public void setTimeInfo(@NonNull ArrayList<TimeInfo> timeInfo) {
         this.timeInfo = timeInfo;
     }
 }
