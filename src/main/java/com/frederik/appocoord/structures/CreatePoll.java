@@ -39,10 +39,11 @@ public class CreatePoll extends PollInfo {
 
     public Poll toPoll(RedisService redisService) {
         var timeInfo = new ArrayList<TimeUserCollection>();
-        if (!this.available_times.isEmpty()) {
-            timeInfo.add(new TimeUserCollection(this.uploader, this.available_times));
-        }
         String id = redisService.createIf(this.uploader.getFingerprint(), this.uploader);
+        if (!this.available_times.isEmpty()) {
+            timeInfo.add(new TimeUserCollection(redisService, id, this.available_times));
+        }
+
         return new Poll(this.title, this.description, this.location, timeInfo, id);
     }
 }

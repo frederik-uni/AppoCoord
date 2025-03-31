@@ -11,7 +11,7 @@ public class PollResponse extends Poll {
     @NonNull
     private String id;
     @JsonIgnore
-    private final RedisService redisService;
+    private RedisService redisService;
 
     public PollResponse(RedisService redisService, @NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator, @NonNull String id) {
         super(title, description, location, users, creator);
@@ -21,7 +21,7 @@ public class PollResponse extends Poll {
 
     @NonNull
     public User getCreator() {
-        return (User) this.redisService.getData(getCreatorId());
+        return (User) redisService.getData(getCreatorId());
     }
 
     @NonNull

@@ -40,6 +40,7 @@ public class Poll extends PollInfo implements Serializable {
     }
 
     public PollResponse getResponse(RedisService redisService, String id) {
+        this.users.forEach(v -> v.setRedis(redisService));
         return new PollResponse(redisService, this.title, this.description, this.location, this.users, this.creator, id);
     }
 }
