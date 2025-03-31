@@ -31,7 +31,7 @@ public class Poll extends PollInfo implements Serializable {
     @JsonIgnore
     public void addTimeUserCollection(RedisService redisService, ReplyPollRequest data) {
         String id = redisService.createIf(data.getUser().getFingerprintInternal(), data.getUser());
-        this.users.stream().filter(user -> !user.getUserId().equals(id)).collect(Collectors.toCollection(ArrayList::new));
+        this.users = this.users.stream().filter(user -> !user.getUserId().equals(id)).collect(Collectors.toCollection(ArrayList::new));
         this.users.add(new TimeUserCollection(redisService, id, data.getTimeInfo()));
     }
 
