@@ -17,7 +17,7 @@ const data = ref(null);
 onMounted(async () => {
   const fp = await FingerprintJS.load();
   const fp_ = await fp.get();
-  const v = await fetch(`http://127.0.0.1:9091/api/info/${id}`, {headers: {"fingerprint": fp_.visitorId}})
+  const v = await fetch(`/api/info/${id}`, {headers: {"fingerprint": fp_.visitorId}})
   data.value = await v.json();
 })
 </script>

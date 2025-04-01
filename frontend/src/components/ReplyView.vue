@@ -31,7 +31,7 @@ const toggleSelection = (timeRange: { start: number; end: number }) => {
     selectedTimes.value.set(timeKey, timeRange);
   }
 
-  fetch("http://127.0.0.1:9091/api/reply/" + props.data.id, {
+  fetch("/api/reply/" + props.data.id, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({

@@ -31,7 +31,7 @@ onMounted(async () => {
 
 const send = async () => {
   loading.value = true;
-  const resp = await fetch("http://127.0.0.1:9091/api/create", {
+  const resp = await fetch("/api/create", {
     method: 'POST',
     body: JSON.stringify({
       title: formData.title,
