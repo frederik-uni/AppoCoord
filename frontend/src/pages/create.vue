@@ -6,6 +6,7 @@ import Submit from "@/components/Submit.vue";
 import Input from "@/components/Input.vue";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import ReplyView from "@/components/ReplyView.vue";
+import DatePicker from "@/components/DatePicker.vue";
 
 const formData = reactive({
   title: '',
@@ -58,10 +59,31 @@ const send = async () => {
 };
 
 const isDisabled = computed(() => {
-  //TODO: check if email is valid, end is valid date in the future, validate available_times
-  return formData.title.length == 0 || formData.end.length == 0 || formData.uploader.email.length == 0 || formData.uploader.name.length == 0 || formData.available_times.length == 0 || formData.uploader.fingerprint.length == 0
-
+  //TODO: check if email is valid, end is valid date in the future
+  return formData.title.length == 0 || formData.end.length == 0 || formData.uploader.email.length == 0 || formData.uploader.name.length == 0 || formData.available_times.length == 0 || formData.uploader.fingerprint.length == 0 || validateAvailableTimes()
 })
+
+const validateAvailableTimes = () => {
+  const now = new Date();
+  const end = new Date(formData.end);
+  if (isNaN(end) || end < now) {
+    return true;
+  }
+  formData.available_times.some(([start, end]) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    return (
+      start.length === 0 ||
+      end.length === 0 ||
+      isNaN(startDate) ||
+      isNaN(endDate) ||
+      startDate < now ||
+      endDate < now ||
+      startDate >= endDate
+    );
+  });
+}
 
 </script>
 
@@ -76,9 +98,11 @@ const isDisabled = computed(() => {
       <Input v-model="formData.title" :required="true" name="Title" type="text"/>
       <Input v-model="formData.description" :required="false" name="Description" type="text"/>
       <Input v-model="formData.location" :required="false" name="Location" type="text"/>
-      <Input v-model="formData.end" :required="true" name="End Poll" type="datetime-local"/>
+      <Input v-model="formData.end" :required="true" name="End Poll" type="datetime-local" />
       <Input v-model="formData.uploader.name" :required="true" name="Username" type="text"/>
       <Input v-model="formData.uploader.email" :required="true" name="Email" type="text"/>
+      <DatePicker v-model="availableTimes"
+                  @update:model-value="(value) => formData.available_times = value"/>
       <Submit :disabled="isDisabled">Share Poll</Submit>
     </Container>
     <Container v-else>
