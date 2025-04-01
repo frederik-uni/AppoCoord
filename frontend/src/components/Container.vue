@@ -12,7 +12,7 @@ const handleSubmit = (event: Event) => {
 </script>
 
 <template>
-  <form class="max-w-3xl mx-auto p-4 bg-white rounded-md" @submit.prevent="handleSubmit">
+  <form class="max-w-3xl w-full mx-auto p-4 bg-white rounded-md" @submit.prevent="handleSubmit">
     <slot/>
   </form>
 </template>

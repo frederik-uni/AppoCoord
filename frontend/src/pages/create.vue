@@ -70,6 +70,7 @@ const isDisabled = computed(() => {
     <ReplyView :data="data"/>
   </template>
   <template v-else>
+    <div class="flex items-center justify-center h-screen w-screen">
     <Container v-if="!loading" @submit="send">
       <Title>Create Poll</Title>
       <Input v-model="formData.title" :required="true" name="Title" type="text"/>
@@ -83,5 +84,6 @@ const isDisabled = computed(() => {
     <Container v-else>
       <div class="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"/>
     </Container>
+    </div>
   </template>
 </template>
