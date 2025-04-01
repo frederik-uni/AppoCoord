@@ -5,6 +5,8 @@ import Title from "@/components/Title.vue";
 
 const props = defineProps<{ data: any }>();
 const fingerprint = ref<string | null>(null);
+const selectedTimes = ref<Set<string>>(new Set());
+
 onMounted(async () => {
   const fp = await FingerprintJS.load();
   const fp_ = await fp.get();
@@ -14,14 +16,20 @@ const date = computed(() => {
   return new Date(props.data.end * 1000);
 })
 
+const toggleSelection = (timeRange: string) => {
+  if (selectedTimes.value.has(timeRange)) {
+    selectedTimes.value.delete(timeRange);
+  } else {
+    selectedTimes.value.add(timeRange);
+  }
+};
+
+
 const availableTimesAdmin = computed(() => {
   const timeCounts = new Map();
-
-  props.data.users.forEach((user: any) => {
-    user.timeInfo.forEach((time: any) => {
-      const timeRange = new Date(time.start * 1000).toLocaleString() + " - " + new Date(time.end * 1000).toLocaleString();
-      timeCounts.set(timeRange, (timeCounts.get(timeRange) || 0) + 1);
-    });
+  const times = props.data.users.flatMap((user: any) => user.timeInfo);
+  [...times, ...selectedTimes.value].forEach((time: any) => {
+    timeCounts.set(time, (timeCounts.get(time) || 0) + 1);
   });
   return Array.from(timeCounts.entries());
 });
@@ -29,6 +37,10 @@ const availableTimesAdmin = computed(() => {
 const timeOver = computed(() => {
   return props.data.end * 1000 < Date.now()
 })
+
+const displayDate = (time: any) => {
+  return new Date(time.start * 1000).toLocaleString() + " - " + new Date(time.end * 1000).toLocaleString();
+}
 
 </script>
 
@@ -52,7 +64,15 @@ const timeOver = computed(() => {
     </div>
     <ul v-else>
       <li v-for="[availableTime, count] in availableTimesAdmin">
-        {{ availableTime }}
+        <label>
+          <input
+            type="checkbox"
+            :value="availableTime"
+            :checked="selectedTimes.has(availableTime)"
+            @change="toggleSelection(availableTime)"
+          />
+          {{ count }} {{ displayDate(availableTime) }}
+        </label>
       </li>
     </ul>
   </template>
