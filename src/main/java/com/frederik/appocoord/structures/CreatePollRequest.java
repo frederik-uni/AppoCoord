@@ -17,8 +17,8 @@ public class CreatePollRequest extends PollInfo {
     @NonNull
     private ArrayList<TimeInfo> available_times;
 
-    public CreatePollRequest(@NonNull String title, String description, String location, @NonNull User uploader, @NonNull ArrayList<TimeInfo> available_times) {
-        super(title, description, location);
+    public CreatePollRequest(String title, String description, String location, int end, @NonNull User uploader, @NonNull ArrayList<TimeInfo> available_times) {
+        super(title, description, location, end);
         this.uploader = uploader;
         this.available_times = available_times;
     }
@@ -48,6 +48,6 @@ public class CreatePollRequest extends PollInfo {
             timeInfo.add(new TimeUserCollection(redisService, id, this.available_times));
         }
 
-        return new Poll(this.title, this.description, this.location, timeInfo, id);
+        return new Poll(this.title, this.description, this.location, this.end, timeInfo, id);
     }
 }

@@ -15,8 +15,8 @@ public class PollResponse extends Poll {
     @JsonIgnore
     private RedisService redisService;
 
-    public PollResponse(RedisService redisService, @NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator, @NonNull String id) {
-        super(title, description, location, users, creator);
+    public PollResponse(String title, String description, String location, int end, ArrayList<TimeUserCollection> users, String creator, @NonNull String id, RedisService redisService) {
+        super(title, description, location, end, users, creator);
         this.id = id;
         this.redisService = redisService;
     }

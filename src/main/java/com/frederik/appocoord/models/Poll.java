@@ -18,8 +18,8 @@ public class Poll extends PollInfo implements Serializable {
     @NonNull
     private String creator;
 
-    public Poll(@NonNull String title, String description, String location, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator) {
-        super(title, description, location);
+    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator) {
+        super(title, description, location, end);
         this.users = users;
         this.creator = creator;
     }
@@ -51,6 +51,6 @@ public class Poll extends PollInfo implements Serializable {
 
     public PollResponse getResponse(RedisService redisService, String id) {
         this.users.forEach(v -> v.setRedis(redisService));
-        return new PollResponse(redisService, this.title, this.description, this.location, this.users, this.creator, id);
+        return new PollResponse(this.title, this.description, this.location, this.end, this.users, this.creator, id, redisService);
     }
 }

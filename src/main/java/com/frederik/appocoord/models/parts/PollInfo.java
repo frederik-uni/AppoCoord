@@ -9,11 +9,22 @@ public class PollInfo implements Serializable {
     protected String title;
     protected String description;
     protected String location;
+    @NonNull
+    protected int end;
 
-    public PollInfo(@NonNull String title, String description, String location) {
+    public PollInfo(@NonNull String title, String description, String location, int end) {
         this.title = title;
         this.description = description;
         this.location = location;
+        this.end = end;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
     }
 
     @NonNull
