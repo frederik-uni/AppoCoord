@@ -2,6 +2,7 @@ FROM node:23-alpine AS frontend-build
 WORKDIR /frontend
 RUN npm install -g pnpm
 COPY frontend/ ./
+RUN rm -rf node_modules
 RUN pnpm install  --shamefully-hoist --no-frozen-lockfile
 RUN pnpm run build
 
