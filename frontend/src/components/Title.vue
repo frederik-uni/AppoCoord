@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h1><slot /></h1>
+<h1 class="text-4xl font-bold"><slot /></h1>
 </template>
 
 <style scoped>
