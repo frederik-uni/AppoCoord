@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import Title from "@/components/Title.vue";
 import Input from "@/components/Input.vue";
@@ -7,7 +7,7 @@ import Submit from "@/components/Submit.vue";
 
 const props = defineProps<{ data: any }>();
 const fingerprint = ref<string | null>(null);
-const selectedTimes = ref<Set<any>>(new Set());
+const selectedTimes = ref<Map<string, { start: number; end: number }>>(new Map());
 const userInfo = reactive({
   name: "",
   email: "",
@@ -22,7 +22,14 @@ const date = computed(() => {
   return new Date(props.data.end * 1000);
 })
 
-const toggleSelection = (timeRange: string) => {
+const toggleSelection = (timeRange: { start: number; end: number }) => {
+  const timeKey = `${timeRange.start}-${timeRange.end}`;
+  if (selectedTimes.value.has(timeKey)) {
+    selectedTimes.value.delete(timeKey);
+  } else {
+    selectedTimes.value.set(timeKey, timeRange);
+  }
+
   fetch("http://127.0.0.1:9091/api/reply/" + props.data.id, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -32,23 +39,32 @@ const toggleSelection = (timeRange: string) => {
         "name": userInfo.name,
         "email": userInfo.email,
       },
-      "timeInfo": Array.from(selectedTimes.value)
+      "timeInfo": Array.from(Array.from(selectedTimes.value.values()).flat())
     })
   })
-  if (selectedTimes.value.has(timeRange)) {
-    selectedTimes.value.delete(timeRange);
-  } else {
-    selectedTimes.value.add(timeRange);
-  }
 };
 
+watch(
+  props.data,
+  (newValue, _) => {
+    newValue.users
+      .filter((v: any) => v.user.fingerprint.length != 0)
+      .forEach((v: any) => {
+        v.timeInfo.forEach((v: any) => selectedTimes.value.set(`${v.start}-${v.end}`,v));
+      });
+  },
+  { immediate: true }
+);
+
 const availableTimesAdmin = computed(() => {
+  console.log(Array.from(selectedTimes.value.values()))
   const timeCounts = new Map();
   const times = props.data.users.flatMap((user: any) => user.timeInfo);
-  [...times, ...selectedTimes.value].forEach((time: any) => {
-    timeCounts.set(time, (timeCounts.get(time) || 0) + 1);
+  [...times, ...selectedTimes.value.values()].forEach((time: any) => {
+    const v = [time, (timeCounts.get(time)?.[1] || 0) + 1];
+    timeCounts.set(`${time.start}-${time.end}`, v);
   });
-  return Array.from(timeCounts.entries());
+  return Array.from(timeCounts.values());
 });
 
 const timeOver = computed(() => {
@@ -83,7 +99,7 @@ const disabled = computed(() => {
       </ul>
     </div>
     <div v-else>
-      <form v-if="!userInfo.submitted" @submit="() => userInfo.submitted = true">
+      <form v-if="userInfo.submitted" @submit="() => userInfo.submitted = true">
         <Input name="Name" type="text" v-model="userInfo.name" :required="true"/>
         <Input name="Email" type="text" v-model="userInfo.email" :required="true"/>
         <Submit :disabled="disabled">Set Info</Submit>
@@ -94,7 +110,7 @@ const disabled = computed(() => {
             <input
               type="checkbox"
               :value="availableTime"
-              :checked="selectedTimes.has(availableTime)"
+              :checked="selectedTimes.has( `${availableTime.start}-${availableTime.end}`)"
               @change="toggleSelection(availableTime)"
             />
             {{ count }} {{ displayDate(availableTime) }}
