@@ -5,7 +5,6 @@ import Title from "@/components/Title.vue";
 import Submit from "@/components/Submit.vue";
 import Input from "@/components/Input.vue";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import {useRouter} from "vue-router";
 import ReplyView from "@/components/ReplyView.vue";
 
 const formData = reactive({

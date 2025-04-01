@@ -19,14 +19,14 @@ public class Api {
     public PollResponse create(@RequestBody CreatePollRequest data) {
         String id = redisService.saveData(data.toPoll());
         Poll db_data = (Poll) redisService.getData(id);
-        return db_data.getResponse(id);
+        return db_data.getResponse(id, db_data.getCreator().getFingerprint().substring(0));
     }
 
     @GetMapping("/info/{id}")
     @CrossOrigin(origins = "*")
-    public PollResponse info(@PathVariable String id) {
+    public PollResponse info(@PathVariable String id, @RequestHeader(value = "fingerprint", required = true) String fingerprint) {
         Poll db_data = (Poll) redisService.getData(id);
-        return db_data.getResponse(id);
+        return db_data.getResponse(id, fingerprint);
     }
 
     @PostMapping("/reply/{id}")
@@ -36,6 +36,6 @@ public class Api {
         db_data.addTimeUserCollection(data);
         redisService.createOrUpdate(id, db_data);
 
-        return db_data.getResponse(id);
+        return db_data.getResponse(id, data.getUser().getFingerprint().substring(0));
     }
 }

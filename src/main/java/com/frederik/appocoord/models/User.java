@@ -1,5 +1,6 @@
 package com.frederik.appocoord.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.SpringContext;
 import org.springframework.lang.NonNull;
@@ -26,5 +27,12 @@ public class User extends UserInternal implements Serializable {
         this.setFingerprint(data.getFingerprint());
         this.setName(data.getName());
         this.setEmail(data.getEmail());
+    }
+
+    @JsonIgnore
+    public void censor(String fingerprint) {
+        if (!fingerprint.equals(this.getFingerprint())) {
+            this.setFingerprint("");
+        }
     }
 }

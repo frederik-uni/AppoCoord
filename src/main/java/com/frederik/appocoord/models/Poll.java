@@ -48,7 +48,10 @@ public class Poll extends PollInfo implements Serializable {
         this.users = users;
     }
 
-    public PollResponse getResponse(String id) {
+    @JsonIgnore
+    public PollResponse getResponse(String id, String userId) {
+        this.creator.censor(userId);
+        this.users.forEach(v -> v.getUser().censor(userId));
         return new PollResponse(this.title, this.description, this.location, this.end, this.users, this.creator, id);
     }
 }

@@ -9,12 +9,15 @@
 import {useRoute} from 'vue-router'
 import {onMounted, ref} from "vue";
 import ReplyView from "@/components/ReplyView.vue";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const route = useRoute()
 const id = route.params.id;
 const data = ref(null);
 onMounted(async () => {
-  const v = await fetch(`http://127.0.0.1:9091/api/info/${id}`)
+  const fp = await FingerprintJS.load();
+  const fp_ = await fp.get();
+  const v = await fetch(`http://127.0.0.1:9091/api/info/${id}`, {headers: {"fingerprint": fp_.visitorId}})
   data.value = await v.json();
 })
 </script>
