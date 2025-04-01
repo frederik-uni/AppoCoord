@@ -59,9 +59,10 @@ watch(
 const availableTimesAdmin = computed(() => {
   console.log(Array.from(selectedTimes.value.values()))
   const timeCounts = new Map();
-  const times = props.data.users.flatMap((user: any) => user.timeInfo);
+  const times = props.data.users.filter((v: any) => v.user.fingerprint.length == 0).flatMap((user: any) => user.timeInfo);
   [...times, ...selectedTimes.value.values()].forEach((time: any) => {
-    const v = [time, (timeCounts.get(time)?.[1] || 0) + 1];
+    const prev = timeCounts.get(`${time.start}-${time.end}`);
+    const v = [time, (prev ? prev[1] : 0) + 1];
     timeCounts.set(`${time.start}-${time.end}`, v);
   });
   return Array.from(timeCounts.values());
