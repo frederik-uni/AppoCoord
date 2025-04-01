@@ -3,7 +3,9 @@ const props = defineProps<{ data: any }>();
 </script>
 
 <template>
-  {{ JSON.stringify(data) }}
+  <textarea class="w-screen h-screen">
+  {{ JSON.stringify(data, null, 4) }}
+  </textarea>
 </template>
 
 <style scoped>

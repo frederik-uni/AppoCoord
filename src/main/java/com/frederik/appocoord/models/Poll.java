@@ -1,7 +1,6 @@
 package com.frederik.appocoord.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.parts.PollInfo;
 import com.frederik.appocoord.models.parts.TimeUserCollection;
 import com.frederik.appocoord.structures.PollResponse;
@@ -16,27 +15,27 @@ public class Poll extends PollInfo implements Serializable {
     @NonNull
     private ArrayList<TimeUserCollection> users;
     @NonNull
-    private String creator;
+    private User creator;
 
-    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull String creator) {
+    @NonNull
+    public User getCreator() {
+        return creator;
+    }
+
+    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull User creator) {
         super(title, description, location, end);
         this.users = users;
         this.creator = creator;
     }
 
     @JsonIgnore
-    public String getCreatorId() {
-        return this.creator;
+    public void addTimeUserCollection(ReplyPollRequest data) {
+        String id = data.getUser().getFingerprint();
+        this.users = this.users.stream().filter(user -> !user.getUser().getFingerprint().equals(id)).collect(Collectors.toCollection(ArrayList::new));
+        this.users.add(new TimeUserCollection(data.getUser(), data.getTimeInfo()));
     }
 
-    @JsonIgnore
-    public void addTimeUserCollection(RedisService redisService, ReplyPollRequest data) {
-        String id = redisService.createIf(data.getUser().getFingerprintInternal(), data.getUser());
-        this.users = this.users.stream().filter(user -> !user.getUserId().equals(id)).collect(Collectors.toCollection(ArrayList::new));
-        this.users.add(new TimeUserCollection(id, data.getTimeInfo()));
-    }
-
-    public void setCreator(@NonNull String creator) {
+    public void setCreator(@NonNull User creator) {
         this.creator = creator;
     }
 
@@ -49,7 +48,7 @@ public class Poll extends PollInfo implements Serializable {
         this.users = users;
     }
 
-    public PollResponse getResponse(RedisService redisService, String id) {
-        return new PollResponse(this.title, this.description, this.location, this.end, this.users, this.creator, id, redisService);
+    public PollResponse getResponse(String id) {
+        return new PollResponse(this.title, this.description, this.location, this.end, this.users, this.creator, id);
     }
 }

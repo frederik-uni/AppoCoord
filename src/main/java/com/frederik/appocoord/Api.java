@@ -19,23 +19,23 @@ public class Api {
     public PollResponse create(@RequestBody CreatePollRequest data) {
         String id = redisService.saveData(data.toPoll());
         Poll db_data = (Poll) redisService.getData(id);
-        return db_data.getResponse(redisService, id);
+        return db_data.getResponse(id);
     }
 
     @GetMapping("/info/{id}")
     @CrossOrigin(origins = "*")
     public PollResponse info(@PathVariable String id) {
         Poll db_data = (Poll) redisService.getData(id);
-        return db_data.getResponse(redisService, id);
+        return db_data.getResponse(id);
     }
 
     @PostMapping("/reply/{id}")
     @CrossOrigin(origins = "*")
     public PollResponse getUserById(@PathVariable String id, @RequestBody ReplyPollRequest data) {
         Poll db_data = (Poll) redisService.getData(id);
-        db_data.addTimeUserCollection(redisService, data);
+        db_data.addTimeUserCollection(data);
         redisService.createOrUpdate(id, db_data);
 
-        return db_data.getResponse(redisService, id);
+        return db_data.getResponse(id);
     }
 }

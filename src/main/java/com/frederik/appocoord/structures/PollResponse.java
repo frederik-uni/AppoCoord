@@ -1,7 +1,5 @@
 package com.frederik.appocoord.structures;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.frederik.appocoord.RedisService;
 import com.frederik.appocoord.models.Poll;
 import com.frederik.appocoord.models.User;
 import com.frederik.appocoord.models.parts.TimeUserCollection;
@@ -12,18 +10,10 @@ import java.util.ArrayList;
 public class PollResponse extends Poll {
     @NonNull
     private String id;
-    @JsonIgnore
-    private RedisService redisService;
 
-    public PollResponse(String title, String description, String location, int end, ArrayList<TimeUserCollection> users, String creator, @NonNull String id, RedisService redisService) {
+    public PollResponse(String title, String description, String location, int end, ArrayList<TimeUserCollection> users, User creator, @NonNull String id) {
         super(title, description, location, end, users, creator);
         this.id = id;
-        this.redisService = redisService;
-    }
-
-    @NonNull
-    public User getCreator() {
-        return (User) redisService.getData(getCreatorId());
     }
 
     @NonNull

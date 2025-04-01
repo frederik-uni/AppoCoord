@@ -1,54 +1,30 @@
 package com.frederik.appocoord.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.frederik.appocoord.RedisService;
+import com.frederik.appocoord.SpringContext;
 import org.springframework.lang.NonNull;
 
-import java.io.Serializable;
+import java.io.*;
 
-public class User implements Serializable {
-    @NonNull
-    private String fingerprint;
-    @NonNull
-    private String name;
-    @NonNull
-    private String email;
-
+public class User extends UserInternal implements Serializable {
     public User(@NonNull String fingerprint, @NonNull String name, @NonNull String email) {
-        this.fingerprint = fingerprint;
-        this.name = name;
-        this.email = email;
+        super(fingerprint, name, email);
     }
 
-    @NonNull
-    public String getFingerprint() {
-        return "";
+    @Serial
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        String id = SpringContext.getBean(RedisService.class).createOrUpdate(super.getFingerprint(), new UserInternal(super.getFingerprint(), super.getName(), super.getEmail()));
+        out.writeObject(id);
     }
 
-    public void setFingerprint(@NonNull String fingerprint) {
-        this.fingerprint = fingerprint;
-    }
-
-    @NonNull
-    @JsonIgnore
-    public String getFingerprintInternal() {
-        return this.fingerprint;
-    }
-
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@NonNull String name) {
-        this.name = name;
-    }
-
-    @NonNull
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@NonNull String email) {
-        this.email = email;
+    @Serial
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        String id = (String) in.readObject();
+        UserInternal data = (UserInternal) SpringContext.getBean(RedisService.class).getData(id);
+        this.setFingerprint(data.getFingerprint());
+        this.setName(data.getName());
+        this.setEmail(data.getEmail());
     }
 }
