@@ -16,7 +16,7 @@ public class Api {
 
     @PostMapping("/create")
     public PollResponse create(@RequestBody CreatePollRequest data) {
-        String id = redisService.saveData(data.toPoll(this.redisService));
+        String id = redisService.saveData(data.toPoll());
         Poll db_data = (Poll) redisService.getData(id);
         return db_data.getResponse(redisService, id);
     }

@@ -33,7 +33,7 @@ public class Poll extends PollInfo implements Serializable {
     public void addTimeUserCollection(RedisService redisService, ReplyPollRequest data) {
         String id = redisService.createIf(data.getUser().getFingerprintInternal(), data.getUser());
         this.users = this.users.stream().filter(user -> !user.getUserId().equals(id)).collect(Collectors.toCollection(ArrayList::new));
-        this.users.add(new TimeUserCollection(redisService, id, data.getTimeInfo()));
+        this.users.add(new TimeUserCollection(id, data.getTimeInfo()));
     }
 
     public void setCreator(@NonNull String creator) {
@@ -50,7 +50,6 @@ public class Poll extends PollInfo implements Serializable {
     }
 
     public PollResponse getResponse(RedisService redisService, String id) {
-        this.users.forEach(v -> v.setRedis(redisService));
         return new PollResponse(this.title, this.description, this.location, this.end, this.users, this.creator, id, redisService);
     }
 }
