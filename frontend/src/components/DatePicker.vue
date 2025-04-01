@@ -42,36 +42,41 @@ export default {
       currentMinDate: this.getCurrentDateTime()
     };
   },
-  computed: {
-    availableTimes() {
-      const now = new Date().getTime();
-      const result = [];
-
-      for (const range of this.ranges) {
-        if (!range.start || !range.end) return [];
-
-        const startTime = `${range.start}:00`;
-        const endTime = `${range.end}:00`;
-
-        const startDate = new Date(startTime).getTime();
-        const endDate = new Date(endTime).getTime();
-
-        if (startDate >= endDate || startDate <= now) return [];
-
-        result.push([startTime, endTime]);
-      }
-
-      return result;
-    }
-  },
   watch: {
-    availableTimes(newVal) {
-      this.$emit('update:modelValue', newVal);
+    ranges: {
+      handler(newVal) {
+        const now = new Date().getTime();
+        const result = [];
+        console.log("aaa");
+        for (const range of this.ranges) {
+          if (!range.start || !range.end) {
+            this.$emit('update:modelValue', []);
+            return;
+          }
+
+          const startTime = `${range.start}:00`;
+          const endTime = `${range.end}:00`;
+
+          const startDate = new Date(startTime).getTime();
+          const endDate = new Date(endTime).getTime();
+
+          if (startDate >= endDate || startDate <= now) {
+            this.$emit('update:modelValue', []);
+            return;
+          }
+          result.push([startTime, endTime]);
+        }
+
+        this.$emit('update:modelValue', result);
+      },
+      deep: true,
+      immediate: true
     }
   },
   emits: ["update:modelValue"],
   methods: {
-    addRange() {
+    addRange(e) {
+      e.preventDefault()
       this.ranges.push({ start: '', end: '' });
     },
     removeRange(index) {
