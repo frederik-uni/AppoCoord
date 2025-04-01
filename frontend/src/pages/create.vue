@@ -75,7 +75,7 @@ const isDisabled = computed(() => {
       <Input v-model="formData.title" :required="true" name="Title" type="text"/>
       <Input v-model="formData.description" :required="false" name="Description" type="text"/>
       <Input v-model="formData.location" :required="false" name="Location" type="text"/>
-      <Input v-model="formData.end" :required="true" name="End Poll" type="date"/>
+      <Input v-model="formData.end" :required="true" name="End Poll" type="datetime-local"/>
       <Input v-model="formData.uploader.name" :required="true" name="Username" type="text"/>
       <Input v-model="formData.uploader.email" :required="true" name="Email" type="text"/>
       <Submit :disabled="isDisabled">Share Poll</Submit>
