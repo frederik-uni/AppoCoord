@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import Title from "@/components/Title.vue";
@@ -50,10 +50,10 @@ watch(
     newValue.users
       .filter((v: any) => v.user.fingerprint.length != 0)
       .forEach((v: any) => {
-        v.timeInfo.forEach((v: any) => selectedTimes.value.set(`${v.start}-${v.end}`,v));
+        v.timeInfo.forEach((v: any) => selectedTimes.value.set(`${v.start}-${v.end}`, v));
       });
   },
-  { immediate: true }
+  {immediate: true}
 );
 
 const availableTimesAdmin = computed(() => {
@@ -101,17 +101,17 @@ const disabled = computed(() => {
     </div>
     <div v-else>
       <form v-if="userInfo.submitted" @submit="() => userInfo.submitted = true">
-        <Input name="Name" type="text" v-model="userInfo.name" :required="true"/>
-        <Input name="Email" type="text" v-model="userInfo.email" :required="true"/>
+        <Input v-model="userInfo.name" :required="true" name="Name" type="text"/>
+        <Input v-model="userInfo.email" :required="true" name="Email" type="text"/>
         <Submit :disabled="disabled">Set Info</Submit>
       </form>
       <div v-else>
         <div v-for="[availableTime, count] in availableTimesAdmin">
           <label>
             <input
-              type="checkbox"
-              :value="availableTime"
               :checked="selectedTimes.has( `${availableTime.start}-${availableTime.end}`)"
+              :value="availableTime"
+              type="checkbox"
               @change="toggleSelection(availableTime)"
             />
             {{ count }} {{ displayDate(availableTime) }}

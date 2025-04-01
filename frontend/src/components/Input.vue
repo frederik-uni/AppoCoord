@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const model = defineModel<string>()
 const props = defineProps<{
   name: string,
@@ -13,9 +13,9 @@ const props = defineProps<{
       {{ name }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
-    <input v-model="model" :type="type" :id="name" :name="name"
-           class="border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"
-           :required="required"/>
+    <input :id="name" v-model="model" :name="name" :required="required"
+           :type="type"
+           class="border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"/>
   </div>
 </template>
 

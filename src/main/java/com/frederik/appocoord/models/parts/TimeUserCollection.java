@@ -1,6 +1,5 @@
 package com.frederik.appocoord.models.parts;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.frederik.appocoord.models.User;
 import org.springframework.lang.NonNull;
 
@@ -18,14 +17,13 @@ public class TimeUserCollection implements Serializable {
         this.timeInfo = timeInfo;
     }
 
-
-    public void setUser(@NonNull User user) {
-        this.user = user;
-    }
-
     @NonNull
     public User getUser() {
         return user;
+    }
+
+    public void setUser(@NonNull User user) {
+        this.user = user;
     }
 
     @NonNull

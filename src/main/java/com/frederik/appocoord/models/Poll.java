@@ -17,14 +17,18 @@ public class Poll extends PollInfo implements Serializable {
     @NonNull
     private User creator;
 
+    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull User creator) {
+        super(title, description, location, end);
+        this.users = users;
+        this.creator = creator;
+    }
+
     @NonNull
     public User getCreator() {
         return creator;
     }
 
-    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull User creator) {
-        super(title, description, location, end);
-        this.users = users;
+    public void setCreator(@NonNull User creator) {
         this.creator = creator;
     }
 
@@ -33,10 +37,6 @@ public class Poll extends PollInfo implements Serializable {
         String id = data.getUser().getFingerprint();
         this.users = this.users.stream().filter(user -> !user.getUser().getFingerprint().equals(id)).collect(Collectors.toCollection(ArrayList::new));
         this.users.add(new TimeUserCollection(data.getUser(), data.getTimeInfo()));
-    }
-
-    public void setCreator(@NonNull User creator) {
-        this.creator = creator;
     }
 
     @NonNull

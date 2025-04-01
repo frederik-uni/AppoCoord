@@ -1,7 +1,7 @@
 <template>
-  <ReplyView v-if="data" :data="data" />
+  <ReplyView v-if="data" :data="data"/>
   <div v-else>
-    <div class="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin" />
+    <div class="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"/>
   </div>
 </template>
 

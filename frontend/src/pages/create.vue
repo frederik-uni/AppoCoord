@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, onMounted, reactive, ref} from 'vue'
 import Container from "@/components/Container.vue";
 import Title from "@/components/Title.vue";
@@ -67,21 +67,21 @@ const isDisabled = computed(() => {
 
 <template>
   <template v-if="data">
-    <ReplyView :data="data" />
+    <ReplyView :data="data"/>
   </template>
   <template v-else>
-    <Container @submit="send" v-if="!loading">
+    <Container v-if="!loading" @submit="send">
       <Title>Create Poll</Title>
-      <Input name="Title" type="text" v-model="formData.title" :required="true"/>
-      <Input name="Description" type="text" v-model="formData.description" :required="false"/>
-      <Input name="Location" type="text" v-model="formData.location" :required="false"/>
-      <Input name="End Poll" type="date" v-model="formData.end" :required="true"/>
-      <Input name="Username" type="text" v-model="formData.uploader.name" :required="true"/>
-      <Input name="Email" type="text" v-model="formData.uploader.email" :required="true"/>
+      <Input v-model="formData.title" :required="true" name="Title" type="text"/>
+      <Input v-model="formData.description" :required="false" name="Description" type="text"/>
+      <Input v-model="formData.location" :required="false" name="Location" type="text"/>
+      <Input v-model="formData.end" :required="true" name="End Poll" type="date"/>
+      <Input v-model="formData.uploader.name" :required="true" name="Username" type="text"/>
+      <Input v-model="formData.uploader.email" :required="true" name="Email" type="text"/>
       <Submit :disabled="isDisabled">Share Poll</Submit>
     </Container>
     <Container v-else>
-      <div class="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin" />
+      <div class="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"/>
     </Container>
   </template>
 </template>
