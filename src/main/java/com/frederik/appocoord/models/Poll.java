@@ -7,12 +7,16 @@ import com.frederik.appocoord.models.parts.PollInfo;
 import com.frederik.appocoord.models.parts.TimeUserCollection;
 import com.frederik.appocoord.structures.PollResponse;
 import com.frederik.appocoord.structures.ReplyPollRequest;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class Poll extends PollInfo implements Serializable {
     @NonNull
     private ArrayList<TimeUserCollection> users;
@@ -26,31 +30,12 @@ public class Poll extends PollInfo implements Serializable {
         this.creator = creator;
     }
 
-    @NonNull
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(@NonNull User creator) {
-        this.creator = creator;
-    }
-
     @JsonIgnore
     public void addTimeUserCollection(ReplyPollRequest data) {
         String id = data.getUser().getFingerprint();
         this.users = this.users.stream().filter(user -> !user.getUser().getFingerprint().equals(id)).collect(Collectors.toCollection(ArrayList::new));
         this.users.add(new TimeUserCollection(data.getUser(), data.getTimeInfo()));
     }
-
-    @NonNull
-    public ArrayList<TimeUserCollection> getUsers() {
-        return users;
-    }
-
-    public void setUsers(@NonNull ArrayList<TimeUserCollection> users) {
-        this.users = users;
-    }
-
 
     @JsonIgnore
     public PollResponse getResponse(String id, String userId) {
