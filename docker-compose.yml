@@ -9,7 +9,7 @@ services:
       redis:
         condition: service_healthy
   redis:
-    image: redis:alpine
+    image: local-redis-alpine
     ports:
       - "6379:6379"
     volumes:
