@@ -1,12 +1,16 @@
 package com.frederik.appocoord.models.parts;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class TimeInfo implements Serializable {
     private long start;
     private long end;
 
-    public TimeInfo(long start, long end) {
+    @JsonCreator
+    public TimeInfo(@JsonProperty("start") long start, @JsonProperty("end") long end) {
         this.start = start;
         this.end = end;
     }

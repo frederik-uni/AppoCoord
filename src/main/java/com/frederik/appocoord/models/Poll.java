@@ -1,6 +1,8 @@
 package com.frederik.appocoord.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.frederik.appocoord.models.parts.PollInfo;
 import com.frederik.appocoord.models.parts.TimeUserCollection;
 import com.frederik.appocoord.structures.PollResponse;
@@ -17,7 +19,8 @@ public class Poll extends PollInfo implements Serializable {
     @NonNull
     private User creator;
 
-    public Poll(String title, String description, String location, int end, @NonNull ArrayList<TimeUserCollection> users, @NonNull User creator) {
+    @JsonCreator
+    public Poll(@JsonProperty("title") String title, @JsonProperty("description") String description, @JsonProperty("location") String location, @JsonProperty("end") int end, @JsonProperty("users") @NonNull ArrayList<TimeUserCollection> users, @JsonProperty("creator") @NonNull User creator) {
         super(title, description, location, end);
         this.users = users;
         this.creator = creator;
@@ -47,6 +50,7 @@ public class Poll extends PollInfo implements Serializable {
     public void setUsers(@NonNull ArrayList<TimeUserCollection> users) {
         this.users = users;
     }
+
 
     @JsonIgnore
     public PollResponse getResponse(String id, String userId) {
