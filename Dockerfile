@@ -1,12 +1,11 @@
-FROM node:23-alpine AS frontend-build
+FROM local-pnpm-alpine AS frontend-build
 WORKDIR /frontend
-RUN npm install -g pnpm
 COPY frontend/ ./
 RUN rm -rf node_modules
 RUN pnpm install  --shamefully-hoist --no-frozen-lockfile
 RUN pnpm run build
 
-FROM maven:3.9.9-amazoncorretto-24-alpine AS backend-build
+FROM local-maven-amazoncorretto24-alpine AS backend-build
 WORKDIR /app
 
 COPY pom.xml /app
@@ -16,7 +15,7 @@ COPY --from=frontend-build /frontend/dist /app/src/main/resources/static
 
 RUN mvn clean package -DskipTests
 
-FROM amazoncorretto:24-alpine-jdk AS run
+FROM local-amazoncorretto24-alpine AS run
 
 COPY --from=backend-build /app/target/server.jar /app/server.jar
 
