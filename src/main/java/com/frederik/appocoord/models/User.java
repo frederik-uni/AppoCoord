@@ -3,7 +3,7 @@ package com.frederik.appocoord.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.NonNull;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class User extends UserInternal implements Serializable {
     public User(@NonNull String fingerprint, @NonNull String name, @NonNull String email) {

@@ -2,29 +2,29 @@
   <div class="space-y-4 mt-6">
     <div v-for="(range, index) in ranges" :key="index" class="flex gap-2 items-center">
       <input
-        type="datetime-local"
         v-model="range.start"
-        class="flex-1 border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"
         :min="currentMinDate"
+        class="flex-1 border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"
+        type="datetime-local"
       />
       <input
-        type="datetime-local"
         v-model="range.end"
-        class="flex-1 border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"
         :min="range.start || currentMinDate"
+        class="flex-1 border p-2 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 border-gray-200 text-gray-600"
+        type="datetime-local"
       />
       <button
         v-if="ranges.length > 1"
-        @click="removeRange(index)"
         class="p-2 text-red-500 hover:text-red-700"
+        @click="removeRange(index)"
       >
         ✕
       </button>
     </div>
 
     <button
-      @click="addRange"
       class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      @click="addRange"
     >
       Add Range
     </button>
@@ -38,7 +38,7 @@ export default {
   components: {Input},
   data() {
     return {
-      ranges: [{ start: '', end: '' }],
+      ranges: [{start: '', end: ''}],
       currentMinDate: this.getCurrentDateTime()
     };
   },
@@ -77,7 +77,7 @@ export default {
   methods: {
     addRange(e) {
       e.preventDefault()
-      this.ranges.push({ start: '', end: '' });
+      this.ranges.push({start: '', end: ''});
     },
     removeRange(index) {
       this.ranges.splice(index, 1);

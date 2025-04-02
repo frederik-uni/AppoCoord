@@ -94,10 +94,12 @@ const disabled = computed(() => {
         <ul class="space-y-2">
           <li v-for="[availableTime, count] in availableTimesAdmin" :key="availableTime.start"
               class="bg-gray-100 p-3 rounded-md relative">
-            <div class="absolute h-full rounded-md bg-blue-100 left-0 top-0 z-0"
-                 :class="{'bg-green-100': count == max_count && count > 0}"
-                 :style="{ width: (count / max_count) * 100 + '%' }"/>
-            <label class="relative flex-grow cursor-default z-10">{{ displayDate(availableTime) }}</label>
+            <div :class="{'bg-green-100': count == max_count && count > 0}"
+                 :style="{ width: (count / max_count) * 100 + '%' }"
+                 class="absolute h-full rounded-md bg-blue-100 left-0 top-0 z-0"/>
+            <label class="relative flex-grow cursor-default z-10">{{
+                displayDate(availableTime)
+              }}</label>
           </li>
         </ul>
       </template>
@@ -108,18 +110,20 @@ const disabled = computed(() => {
           <ul class="space-y-2">
             <li v-for="[availableTime, count] in availableTimesAdmin" :key="availableTime.start"
                 class="bg-gray-100 p-3 rounded-md relative">
-              <div class="absolute h-full rounded-md bg-blue-100 left-0 top-0 z-0"
-                   :style="{ width: (count / max_count) * 100 + '%' }"/>
-              <label class="relative flex-grow cursor-default z-10">{{ displayDate(availableTime) }}</label>
+              <div :style="{ width: (count / max_count) * 100 + '%' }"
+                   class="absolute h-full rounded-md bg-blue-100 left-0 top-0 z-0"/>
+              <label class="relative flex-grow cursor-default z-10">{{
+                  displayDate(availableTime)
+                }}</label>
             </li>
           </ul>
         </div>
         <div v-else>
-          <form v-if="userInfo.submitted" @submit.prevent="userInfo.submitted = true"
-                class="space-y-4 w-120" >
-            <Input v-model="userInfo.name" :required="true" name="Name" type="text" class="w-full"/>
-            <Input v-model="userInfo.email" :required="true" name="Email" type="text"
-                   class="w-full"/>
+          <form v-if="userInfo.submitted" class="space-y-4 w-120"
+                @submit.prevent="userInfo.submitted = true">
+            <Input v-model="userInfo.name" :required="true" class="w-full" name="Name" type="text"/>
+            <Input v-model="userInfo.email" :required="true" class="w-full" name="Email"
+                   type="text"/>
             <Submit :disabled="disabled"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Set
               Info
@@ -131,14 +135,14 @@ const disabled = computed(() => {
                  @click="toggleSelection(availableTime)"
 
             >
-              <div class="absolute h-full w-full rounded-md bg-blue-100 left-0"
-                   :style="{ width: (count / max_count) * 100 + '%' }"/>
-            <input
-              :checked="selectedTimes.has(`${availableTime.start}-${availableTime.end}`)"
-              :value="availableTime"
-              type="checkbox"
-              class="w-4 h-4 text-blue-600 border-gray-300 rounded z-2"
-            />
+              <div :style="{ width: (count / max_count) * 100 + '%' }"
+                   class="absolute h-full w-full rounded-md bg-blue-100 left-0"/>
+              <input
+                :checked="selectedTimes.has(`${availableTime.start}-${availableTime.end}`)"
+                :value="availableTime"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded z-2"
+                type="checkbox"
+              />
               <label class="flex-grow cursor-pointer z-2"> {{
                   displayDate(availableTime)
                 }}</label>
