@@ -23,7 +23,7 @@ public class User extends UserInternal implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         String id = (String) in.readObject();
-        UserInternal data = (UserInternal) SpringContext.getBean(RedisService.class).getData(id);
+        UserInternal data = SpringContext.getBean(RedisService.class).getData(id, UserInternal.class);
         this.setFingerprint(data.getFingerprint());
         this.setName(data.getName());
         this.setEmail(data.getEmail());

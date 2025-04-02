@@ -17,19 +17,19 @@ public class Api {
     @PostMapping("/create")
     public PollResponse create(@RequestBody CreatePollRequest data) {
         String id = redisService.saveData(data.toPoll());
-        Poll db_data = (Poll) redisService.getData(id);
+        Poll db_data = redisService.getData(id,  Poll.class);
         return db_data.getResponse(id, db_data.getCreator().getFingerprint().substring(0));
     }
 
     @GetMapping("/info/{id}")
     public PollResponse info(@PathVariable String id, @RequestHeader(value = "fingerprint", required = true) String fingerprint) {
-        Poll db_data = (Poll) redisService.getData(id);
+        Poll db_data = redisService.getData(id, Poll.class);
         return db_data.getResponse(id, fingerprint);
     }
 
     @PostMapping("/reply/{id}")
     public PollResponse getUserById(@PathVariable String id, @RequestBody ReplyPollRequest data) {
-        Poll db_data = (Poll) redisService.getData(id);
+        Poll db_data = redisService.getData(id, Poll.class);
         db_data.addTimeUserCollection(data);
         redisService.createOrUpdate(id, db_data);
 
