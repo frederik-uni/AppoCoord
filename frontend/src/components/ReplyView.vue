@@ -58,7 +58,6 @@ watch(
 );
 const max_count = ref(0);
 const availableTimesAdmin = computed(() => {
-  console.log(Array.from(selectedTimes.value.values()))
   const timeCounts = new Map();
   const times = props.data.users.filter((v: any) => v.user.fingerprint.length == 0).flatMap((user: any) => user.timeInfo);
   [...times, ...selectedTimes.value.values()].forEach((time: any) => {

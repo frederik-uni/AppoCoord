@@ -59,7 +59,7 @@ const send = async () => {
 };
 
 const isDisabled = computed(() => {
-  //TODO: check if email is valid, end is valid date in the future
+  //TODO: check if email is valid
   return formData.title.length == 0 || formData.end.length == 0 || formData.uploader.email.length == 0 || formData.uploader.name.length == 0 || formData.available_times.length == 0 || formData.uploader.fingerprint.length == 0 || validateAvailableTimes()
 })
 

@@ -13,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Service
@@ -32,7 +31,7 @@ public class RedisService {
         objectMapper.registerModule(module);
     }
 
-    public String saveData(Serializable data) {
+    public String saveData(Object data) {
         String id = UUID.randomUUID().toString();
 
         redisTemplate.opsForValue().set(id, toJson(data));
@@ -45,7 +44,7 @@ public class RedisService {
         return fromJson(json, clazz);
     }
 
-    private String toJson(Serializable obj) {
+    private String toJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class RedisService {
         }
     }
 
-    public String createOrUpdate(String id, Serializable data) {
+    public String createOrUpdate(String id, Object data) {
         redisTemplate.opsForValue().set(id, toJson(data));
         return id;
     }
