@@ -43,5 +43,7 @@ browsers.
 ## Start container
 ```sh
 cd dockerfiles && ./build.sh && cd ..
+./generate_certs.sh
+
 docker compose up
 ```
