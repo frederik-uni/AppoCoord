@@ -1,4 +1,18 @@
 services:
+  frontend-1:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - server-1
+      - server-2
+  frontend-2:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - server-1
+      - server-2
   server-1:
     build:
       context: .
@@ -17,11 +31,14 @@ services:
     image: nginx:latest
     ports:
       - "9090:80"
+      - "9091:8080"
     volumes:
       - ./nginx/default.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - server-1
       - server-2
+      - frontend-1
+      - frontend-2
   redis:
     image: local-redis-alpine
     ports:
