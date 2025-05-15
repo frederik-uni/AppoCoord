@@ -54,10 +54,10 @@ services:
       - "6379:6379"
     volumes:
       - ./redis_data:/data
-      - ./redis-tls:/etc/redis/tls:ro
+      - ./redis-tls:/etc/redis/tls
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "sh", "-c", "redis-cli --tls ping --cert /etc/redis/tls/redis.crt --key /etc/redis/tls/redis.key --cacert /etc/redis/tls/ca.crt > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
       interval: 1s
       timeout: 3s
-      retries: 30
+      retries: 3
     #restart: unless-stopped
