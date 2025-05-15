@@ -31,7 +31,6 @@ services:
     image: nginx:latest
     ports:
       - "9090:80"
-      - "9091:8080"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
