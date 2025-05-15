@@ -13,7 +13,8 @@ additional suggestions.
 
 ### Port
 
-- 9090
+- 9090(frontend+backend)
+- 9091(frontend)
 
 ### Api docs
 
