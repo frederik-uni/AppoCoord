@@ -38,3 +38,9 @@ browsers.
   <img src="https://github.com/user-attachments/assets/23c91f6c-47a7-44f3-86cd-9ae8b86dcb70" style="width: 49%;" alt="Info">
 </div>
 
+
+## Start container
+```sh
+cd dockerfiles && ./build.sh && cd ..
+docker compose up
+```
