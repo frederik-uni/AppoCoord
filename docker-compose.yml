@@ -1,3 +1,7 @@
+x-common-env: &common-env
+  SSL: "true"
+  API_KEY: "s3cr3t"
+
 services:
   frontend-1:
     build:
@@ -14,6 +18,8 @@ services:
       - server-1
       - server-2
   server-1:
+    environment:
+      <<: *common-env
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,6 +27,8 @@ services:
       redis:
         condition: service_healthy
   server-2:
+    environment:
+      <<: *common-env
     build:
       context: .
       dockerfile: Dockerfile
@@ -40,6 +48,8 @@ services:
       - frontend-1
       - frontend-2
   redis:
+    environment:
+      <<: *common-env
     image: local-redis-alpine
     ports:
       - "6379:6379"
