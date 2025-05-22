@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servers
+  namespace: appocoord
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: servers
+  template:
+    metadata:
+      labels:
+        app: servers
+    spec:
+      containers:
+        - name: server
+          image: ???
+          env:
+            - name: SSL
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: SSL
+            - name: CERT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: CERT_PATH
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: REDIS_PASSWORD
+          volumeMounts:
+            - name: redis-tls
+              mountPath: /tls
+      volumes:
+        - name: redis-tls
+          hostPath:
+            path: /certs/redis-tls
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servers
+  namespace: appocoord
+spec:
+  ports:
+    - port: 9090
+      targetPort: 9090
+  selector:
+    app: servers
