@@ -19,6 +19,4 @@ FROM local-amazoncorretto24-alpine AS run
 
 COPY --from=backend-build /app/target/server.jar /app/server.jar
 
-EXPOSE 9090
-
 ENTRYPOINT ["java", "-jar", "/app/server.jar"]
