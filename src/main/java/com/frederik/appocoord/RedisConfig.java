@@ -1,9 +1,14 @@
 package com.frederik.appocoord;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.SslOptions;
+import io.lettuce.core.SslVerifyMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -14,7 +19,30 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory lettuceConnectionFactory() {
         String host = isRunningInDocker() ? "redis" : "localhost";
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, 6379));
+        var pw = System.getenv("REDIS_PASSWORD");
+        var conf = new RedisStandaloneConfiguration(host, 6379);
+        if (pw != null) {
+            conf.setPassword(RedisPassword.of(pw));
+        }
+        String sslEnv = System.getenv("SSL");
+        boolean isSslEnabled = "true".equalsIgnoreCase(sslEnv);
+        if (isSslEnabled) {
+            String certPath = System.getenv("CERT_PATH");
+            if (!certPath.endsWith("/")) {
+                certPath += "/";
+            }
+            SslOptions sslOptions = SslOptions.builder()
+                    .jdkSslProvider().trustManager(new File(certPath+"ca.crt"))
+                    .build();
+            ClientOptions clientOptions = ClientOptions.builder().sslOptions(sslOptions).build();
+            LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder().clientOptions(clientOptions)
+                    .useSsl().verifyPeer(SslVerifyMode.CA)
+                    .build();
+            return new LettuceConnectionFactory(conf, clientConfig);
+        } else {
+            return new LettuceConnectionFactory(conf);
+        }
+
     }
 
     @Bean

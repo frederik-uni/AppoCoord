@@ -21,8 +21,6 @@ RUN rm /etc/nginx/nginx.conf
 
 RUN mkdir -p /var/run /var/log/nginx
 
-EXPOSE 80
-
 STOPSIGNAL SIGQUIT
 
 CMD ["nginx", "-g", "daemon off;"]

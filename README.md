@@ -41,6 +41,7 @@ browsers.
 
 ## Start container
 ```sh
-cd dockerfiles && ./build.sh && cd ..
+cd dockerfiles && ./build.sh && cd .. && ./generate_https_certs.sh
+
 docker compose up
 ```
