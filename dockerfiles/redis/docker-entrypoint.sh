@@ -1,19 +1,29 @@
 #!/bin/sh
 set -e
 
-CMD_ARGS="/etc/redis/redis.conf"
+CERT_DIR="/etc/redis/tls"
+CERT_FILE="$CERT_DIR/redis.crt"
+KEY_FILE="$CERT_DIR/redis.key"
+CA_CERT_FILE="$CERT_DIR/ca.crt"
 
 if [ "$SSL" = "true" ]; then
+  if [ ! -f "$CERT_FILE" ] || [ ! -f "$KEY_FILE" ] || [ ! -f "$CA_CERT_FILE" ]; then
+    cd /etc/redis
+    bash /opt/redis/utils/gen-redis-certs.sh
+  fi
+
   CMD_ARGS="--tls-port 6379 --port 0 \
-  --tls-cert-file /etc/redis/tls/redis.crt \
-  --tls-key-file /etc/redis/tls/redis.key \
-  --tls-ca-cert-file /etc/redis/tls/ca.crt"
+  --tls-cert-file $CERT_FILE \
+  --tls-key-file $KEY_FILE \
+  --tls-ca-cert-file $CA_CERT_FILE --tls-auth-clients no --bind 0.0.0.0"
 else
-  CMD_ARGS="/etc/redis/redis.conf"
+  CMD_ARGS="--bind 0.0.0.0"
 fi
 
 if [ -n "$API_KEY" ]; then
   CMD_ARGS="$CMD_ARGS --requirepass $API_KEY"
+else
+  CMD_ARGS="$CMD_ARGS --protected-mode no"
 fi
 
 exec redis-server $CMD_ARGS
