@@ -35,7 +35,7 @@ services:
   nginx:
     environment:
       SERVER_NAME: localhost
-    image: nginx:latest
+    image: local-nginx-alpine
     networks:
       - frontend-net
     ports:
@@ -62,7 +62,7 @@ services:
       test: [ "CMD", "/healthcheck.sh"]
       interval: 1s
       timeout: 3s
-      retries: 3
+      retries: 30
     #restart: unless-stopped
 
 networks:
