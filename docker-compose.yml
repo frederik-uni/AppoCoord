@@ -1,9 +1,11 @@
 x-common-env: &common-env
-  SSL: "true"
+  SSL: "false"
   API_KEY: "s3cr3t"
 
 services:
   frontend-1:
+    networks:
+      - frontend-net
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -11,6 +13,8 @@ services:
       - server-1
       - server-2
   frontend-2:
+    networks:
+      - frontend-net
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -18,6 +22,9 @@ services:
       - server-1
       - server-2
   server-1:
+    networks:
+      - internal-net
+      - frontend-net
     environment:
       <<: *common-env
     build:
@@ -27,6 +34,9 @@ services:
       redis:
         condition: service_healthy
   server-2:
+    networks:
+      - internal-net
+      - frontend-net
     environment:
       <<: *common-env
     build:
@@ -37,6 +47,8 @@ services:
         condition: service_healthy
   nginx:
     image: nginx:latest
+    networks:
+      - frontend-net
     ports:
       - "9090:80"
     volumes:
@@ -52,12 +64,22 @@ services:
     image: local-redis-alpine
     ports:
       - "6379:6379"
+    networks:
+      - internal-net
     volumes:
       - ./redis_data:/data
       - ./redis-tls:/etc/redis/tls
     healthcheck:
-      test: [ "CMD", "sh", "-c", "redis-cli --tls ping --cert /etc/redis/tls/redis.crt --key /etc/redis/tls/redis.key --cacert /etc/redis/tls/ca.crt > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
+      test: [ "CMD", "sh", "-c", "redis-cli --tls --cacert /etc/redis/tls/ca.crt ping > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
       interval: 1s
       timeout: 3s
       retries: 3
     #restart: unless-stopped
+
+networks:
+  frontend-net:
+    driver: bridge
+  internal-net:
+    driver: bridge
+
+
