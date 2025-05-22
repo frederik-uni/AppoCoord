@@ -7,13 +7,10 @@ if ! command -v yq &> /dev/null; then
     echo "  sudo dnf install yq         # Fedora"
     echo "  or download from https://github.com/mikefarah/yq"
     exit 1
-else
-    echo "yq is installed."
-    yq --version
 fi
 
 print_help() {
-  echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>] [-h|--help]"
+  echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>] [--server-name <string>] [-h|--help]"
   echo
   echo "Options:"
   echo "  --replicas <number>    Number of replicas to set (required)"
