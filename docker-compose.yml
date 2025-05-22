@@ -1,5 +1,6 @@
 x-common-env: &common-env
-  SSL: "false"
+  SSL: "true"
+  CERT_PATH: "/tls"
   REDIS_PASSWORD: "s3cr3t"
 
 services:
@@ -12,6 +13,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./certs/redis-tls:/tls
     depends_on:
       redis:
         condition: service_healthy
@@ -19,6 +22,8 @@ services:
     networks:
       - internal-net
       - frontend-net
+    volumes:
+      - ./certs/redis-tls:/tls
     environment:
       <<: *common-env
     build:
@@ -28,6 +33,8 @@ services:
       redis:
         condition: service_healthy
   nginx:
+    environment:
+      SERVER_NAME: localhost
     image: nginx:latest
     networks:
       - frontend-net
@@ -42,7 +49,6 @@ services:
       - server-2
   redis:
     environment:
-      SERVER_NAME: localhost
       <<: *common-env
     image: local-redis-alpine
     ports:
@@ -53,8 +59,7 @@ services:
       - ./redis_data:/data
       - ./certs/redis-tls:/etc/redis/tls
     healthcheck:
-      test: [ "CMD", "sh", "-c", "redis-cli  ping  > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
-      #test: [ "CMD", "sh", "-c", "redis-cli --tls --cacert /etc/redis/tls/ca.crt ping > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
+      test: [ "CMD", "/healthcheck.sh"]
       interval: 1s
       timeout: 3s
       retries: 3

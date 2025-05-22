@@ -8,10 +8,12 @@ RUN tar -xzvf redis-stable.tar.gz && \
     cd redis-stable && \
     make install BUILD_TLS=yes
 
-COPY redis/config.conf /etc/redis/redis.conf
 COPY redis/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY redis/healthcheck.sh /healthcheck.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /healthcheck.sh
+
 
 RUN mkdir -p /opt/redis/utils
 RUN curl -fsSL https://raw.githubusercontent.com/allen-munsch/docker-redis-ssl-example/main/redis/gen-redis-certs.sh -o /opt/redis/utils/gen-redis-certs.sh

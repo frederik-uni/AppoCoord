@@ -22,8 +22,9 @@ fi
 
 if [ -n "$REDIS_PASSWORD" ]; then
   CMD_ARGS="$CMD_ARGS --requirepass $REDIS_PASSWORD"
-else
-  CMD_ARGS="$CMD_ARGS --protected-mode no"
 fi
+
+CMD_ARGS="$CMD_ARGS --protected-mode no"
+
 
 exec redis-server $CMD_ARGS

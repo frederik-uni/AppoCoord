@@ -1,5 +1,7 @@
 package com.frederik.appocoord;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.SslOptions;
 import io.lettuce.core.SslVerifyMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +27,16 @@ public class RedisConfig {
         String sslEnv = System.getenv("SSL");
         boolean isSslEnabled = "true".equalsIgnoreCase(sslEnv);
         if (isSslEnabled) {
-            LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                    .useSsl().verifyPeer(SslVerifyMode.FULL)
+            String certPath = System.getenv("CERT_PATH");
+            if (!certPath.endsWith("/")) {
+                certPath += "/";
+            }
+            SslOptions sslOptions = SslOptions.builder()
+                    .jdkSslProvider().trustManager(new File(certPath+"ca.crt"))
+                    .build();
+            ClientOptions clientOptions = ClientOptions.builder().sslOptions(sslOptions).build();
+            LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder().clientOptions(clientOptions)
+                    .useSsl().verifyPeer(SslVerifyMode.CA)
                     .build();
             return new LettuceConnectionFactory(conf, clientConfig);
         } else {
