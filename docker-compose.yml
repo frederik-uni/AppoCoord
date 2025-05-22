@@ -35,7 +35,7 @@ services:
   nginx:
     environment:
       SERVER_NAME: localhost
-    image: local-nginx-alpine
+    image: frederikuni/nginx-alpine:latest
     networks:
       - frontend-net
     ports:
@@ -50,7 +50,9 @@ services:
   redis:
     environment:
       <<: *common-env
-    image: local-redis-alpine
+    build:
+      context: ./dockerfiles/redis
+      dockerfile: Dockerfile
     ports:
       - "6379:6379"
     networks:

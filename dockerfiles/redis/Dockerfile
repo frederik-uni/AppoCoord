@@ -8,8 +8,8 @@ RUN tar -xzvf redis-stable.tar.gz && \
     cd redis-stable && \
     make install BUILD_TLS=yes
 
-COPY redis/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY redis/healthcheck.sh /healthcheck.sh
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY healthcheck.sh /healthcheck.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /healthcheck.sh
@@ -23,5 +23,3 @@ EXPOSE 6379
 
 WORKDIR /data
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-CMD ["redis-server", "/etc/redis/redis.conf"]
