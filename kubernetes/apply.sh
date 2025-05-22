@@ -12,6 +12,17 @@ else
     yq --version
 fi
 
+print_help() {
+  echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>] [-h|--help]"
+  echo
+  echo "Options:"
+  echo "  --replicas <number>    Number of replicas to set (required)"
+  echo "  --ssl                  Enable SSL (sets SSL to true in secrets)"
+  echo "  --cert <path>          Certificate path (default: /tls)"
+  echo "  --password <string>    Redis password (if not set, omitted from secrets)"
+  echo "  -h, --help             Show this help message and exit"
+}
+
 REPLICAS=
 SSL_ENABLED=false
 CERT_PATH=""
@@ -34,6 +45,10 @@ while [[ "$#" -gt 0 ]]; do
     --password)
       REDIS_PASSWORD="$2"
       shift 2
+      ;;
+    -h|--help)
+      print_help
+      exit 0
       ;;
     *)
       echo "Unknown parameter passed: $1"
