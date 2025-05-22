@@ -3,24 +3,6 @@ x-common-env: &common-env
   REDIS_PASSWORD: "s3cr3t"
 
 services:
-  frontend-1:
-    networks:
-      - frontend-net
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    depends_on:
-      - server-1
-      - server-2
-  frontend-2:
-    networks:
-      - frontend-net
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    depends_on:
-      - server-1
-      - server-2
   server-1:
     networks:
       - internal-net
@@ -58,8 +40,6 @@ services:
     depends_on:
       - server-1
       - server-2
-      - frontend-1
-      - frontend-2
   redis:
     environment:
       SERVER_NAME: localhost
