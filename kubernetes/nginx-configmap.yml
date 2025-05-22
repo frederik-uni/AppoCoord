@@ -5,4 +5,33 @@ metadata:
   namespace: appocoord
 data:
   nginx.conf: |
-    # TODO: generate nginx.conf
+    events {}
+  
+    http {
+      upstream backend {
+        server servers.appocoord.svc.cluster.local:9090;
+      }
+    
+      server {
+        listen 80;
+        server_name ${SERVER_NAME};
+        
+        location / {
+          proxy_pass http://backend;
+          }
+        }
+        
+      server {
+        listen 443 ssl;
+        server_name ${SERVER_NAME};
+          
+        ssl_certificate /etc/nginx/ssl/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+          
+        ssl_protocols TLSv1.2 TLSv1.3;
+          
+        location / {
+          proxy_pass http://backend;
+        }
+      }
+    }

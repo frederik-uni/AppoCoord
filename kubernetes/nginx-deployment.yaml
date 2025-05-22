@@ -16,6 +16,12 @@ spec:
       containers:
         - name: nginx
           image: frederikuni/nginx-alpine:latest
+          env:
+            - name: SERVER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: SERVER_NAME
           ports:
             - containerPort: 80
             - containerPort: 443
