@@ -1,4 +1,4 @@
-FROM local-amazoncorretto24-alpine
+FROM frederikuni/amazoncorretto24-alpine:latest
 
 RUN apk add --no-cache maven git
 
