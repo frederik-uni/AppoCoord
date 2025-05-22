@@ -51,8 +51,10 @@ services:
       - frontend-net
     ports:
       - "9090:80"
+      - "9091:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs/https:/etc/nginx/ssl/
     depends_on:
       - server-1
       - server-2
@@ -60,6 +62,7 @@ services:
       - frontend-2
   redis:
     environment:
+      SERVER_NAME: localhost
       <<: *common-env
     image: local-redis-alpine
     ports:
@@ -68,7 +71,7 @@ services:
       - internal-net
     volumes:
       - ./redis_data:/data
-      - ./redis-tls:/etc/redis/tls
+      - ./certs/redis-tls:/etc/redis/tls
     healthcheck:
       test: [ "CMD", "sh", "-c", "redis-cli  ping  > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]
       #test: [ "CMD", "sh", "-c", "redis-cli --tls --cacert /etc/redis/tls/ca.crt ping > /data/redis-healthcheck.log 2>&1 && exit 0 || exit 1" ]

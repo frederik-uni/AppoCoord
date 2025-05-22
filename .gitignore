@@ -34,4 +34,4 @@ build/
 
 /redis_data
 /src/main/resources/static
-redis-tls
+certs
