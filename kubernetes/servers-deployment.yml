@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ???
+          image: my-local-server:latest
           env:
             - name: SSL
               valueFrom:

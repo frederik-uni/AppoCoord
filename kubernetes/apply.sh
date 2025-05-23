@@ -15,7 +15,6 @@ print_help() {
   echo "Options:"
   echo "  --replicas <number>    Number of replicas to set (required)"
   echo "  --ssl                  Enable SSL (sets SSL to true in secrets)"
-  echo "  --cert <path>          Certificate path [default: /tls]"
   echo "  --password <string>    Redis password (if not set, omitted from secrets)"
   echo "  --server-name <string> Nginx server name [default: localhost]"
   echo "  -h, --help             Show this help message and exit"
@@ -23,7 +22,6 @@ print_help() {
 
 REPLICAS=
 SSL_ENABLED=false
-CERT_PATH=""
 REDIS_PASSWORD=""
 SERVER_NAME=""
 
@@ -36,10 +34,6 @@ while [[ "$#" -gt 0 ]]; do
     --ssl)
       SSL_ENABLED=true
       shift
-      ;;
-    --cert)
-      CERT_PATH="$2"
-      shift 2
       ;;
     --password)
       REDIS_PASSWORD="$2"
@@ -68,10 +62,14 @@ fi
 
 yq e '
   .stringData.SSL = (env(SSL_ENABLED) == "true" | tostring) |
-  .stringData.CERT_PATH = (env(CERT_PATH) != "" ? env(CERT_PATH) : "/tls") |
   .stringData.SERVER_NAME = (env(SERVER_NAME) != "" ? env(SERVER_NAME) : "localhost") |
   (env(REDIS_PASSWORD) != "" ? .stringData.REDIS_PASSWORD = env(REDIS_PASSWORD) : del(.stringData.REDIS_PASSWORD))
 ' secrets.yml > temp-secrets.yml
+
+# shellcheck disable=SC2046
+eval $(minikube docker-env)
+docker build -t my-local-server:latest ..
+docker build -t my-local-redis:latest ../dockerfiles/redis
 
 minikube mount ../certs:/certs
 kubectl apply -f namespace.yml

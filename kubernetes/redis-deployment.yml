@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: redis
-          image: ????
+          image: my-local-redis:latest
           ports:
             - containerPort: 6379
           env:
@@ -41,18 +41,18 @@ spec:
               mountPath: /etc/redis/tls
           readinessProbe:
             exec:
-              command: ["/healthcheck.sh"]
+              command: ["/redis-exec.sh", "ping"]
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 3
-            failureThreshold: 3
+            failureThreshold: 30
           livenessProbe:
             exec:
-              command: ["/healthcheck.sh"]
+              command: ["/redis-exec.sh", "ping"]
             initialDelaySeconds: 15
             periodSeconds: 20
             timeoutSeconds: 3
-            failureThreshold: 3
+            failureThreshold: 30
       volumes:
         - name: redis-data
           persistentVolumeClaim:
