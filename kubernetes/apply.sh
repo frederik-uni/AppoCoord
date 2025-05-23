@@ -116,8 +116,9 @@ yq e "select(documentIndex == 0) | .spec.replicas = $REPLICAS" servers-deploymen
 kubectl apply -f servers-deployment.yml
 kubectl apply -f nginx-configmap.yml
 kubectl apply -f nginx-deployment.yml
-kubectl port-forward -n appocoord svc/nginx 9090:80
-kubectl port-forward -n appocoord svc/nginx 9091:443
+kubectl wait --for=condition=Ready pod -l app=nginx -n appocoord --timeout=120s
+kubectl port-forward -n appocoord svc/nginx 9090:80 &
+kubectl port-forward -n appocoord svc/nginx 9091:443 &
 MINIKUBE_IP=127.0.0.1
 HTTP_PORT=9090
 HTTPS_PORT=9091
