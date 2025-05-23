@@ -18,7 +18,7 @@ import java.io.File;
 public class RedisConfig {
     @Bean
     public RedisConnectionFactory lettuceConnectionFactory() {
-        String host = isRunningInDocker() ? "redis" : "localhost";
+        String host = (isRunningInDocker() || isRunningInKubernetes()) ? "redis" : "localhost";
         var pw = System.getenv("REDIS_PASSWORD");
         var conf = new RedisStandaloneConfiguration(host, 6379);
         if (pw != null) {
@@ -51,6 +51,16 @@ public class RedisConfig {
         template.setConnectionFactory(connectionFactory);
         return template;
     }
+    public static boolean isRunningInKubernetes() {
+        String kubernetesEnv = System.getenv("KUBERNETES_SERVICE_HOST");
+        if (kubernetesEnv != null && !kubernetesEnv.isEmpty()) {
+            return true;
+        }
+
+        File saToken = new File("/var/run/secrets/kubernetes.io/serviceaccount/token");
+        return saToken.exists();
+    }
+
 
     private boolean isRunningInDocker() {
         return new File("/.dockerenv").exists() || "true".equalsIgnoreCase(System.getenv("RUNNING_IN_DOCKER"));

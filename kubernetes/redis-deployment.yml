@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: appocoord
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: my-local-redis:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6379
+          env:
+            - name: SSL
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: SSL
+            - name: CERT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: CERT_PATH
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: common-env-secret
+                  key: REDIS_PASSWORD
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+            - name: redis-tls
+              mountPath: /etc/redis/tls
+#          readinessProbe:
+#            exec:
+#              command: ["/redis-exec.sh", "ping"]
+#            initialDelaySeconds: 5
+#            periodSeconds: 10
+#            timeoutSeconds: 3
+#            failureThreshold: 30
+#          livenessProbe:
+#            exec:
+#              command: ["/redis-exec.sh", "ping"]
+#            initialDelaySeconds: 15
+#            periodSeconds: 20
+#            timeoutSeconds: 3
+#            failureThreshold: 30
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-data-pvc
+        - name: redis-tls
+          hostPath:
+            path: /certs/redis-tls
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: appocoord
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
