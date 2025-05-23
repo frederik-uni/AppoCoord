@@ -62,8 +62,8 @@ print_help() {
 
 REPLICAS=
 SSL_ENABLED=false
-REDIS_PASSWORD=""
-SERVER_NAME=""
+REDIS_PASSWORD=
+SERVER_NAME="localhost"
 
 while [[ "$#" -gt 0 ]]; do
   case $1 in
@@ -100,6 +100,12 @@ done
 if [[ -z "$REPLICAS" ]]; then
   echo "Error: --replicas flag is required."
   echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>]"
+  exit 1
+fi
+
+if [[ -z "$REDIS_PASSWORD" ]]; then
+  echo "Error: --password flag is required."
+  echo "Usage: $0 --password <string> [--replicas <number>] [--ssl] [--cert <path>]"
   exit 1
 fi
 
