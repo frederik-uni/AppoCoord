@@ -45,6 +45,7 @@ check_command yq
 check_command docker
 check_command kubectl
 check_command minikube
+check_command envsubst
 
 #todo: check if docker is running or minikube start
 

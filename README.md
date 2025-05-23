@@ -45,6 +45,7 @@ browsers.
 - kubectl
 - yq
 - /bin/bash
+- envsubst
 
 ## Start
 ```sh
