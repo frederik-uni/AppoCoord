@@ -49,7 +49,7 @@ services:
       - server-2
   redis:
     environment:
-      DUMP_SCHEDULE: "* * * * *"
+      DUMP_SCHEDULE: "0 0 1 * *"
       <<: *common-env
     build:
       context: ./dockerfiles/redis
