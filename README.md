@@ -38,10 +38,23 @@ browsers.
   <img src="https://github.com/user-attachments/assets/23c91f6c-47a7-44f3-86cd-9ae8b86dcb70" style="width: 49%;" alt="Info">
 </div>
 
+## Requirements
+- openssl
+- docker/docker-compose
+- minikube
+- kubectl
+- yq
+- /bin/bash
 
-## Start container
+## Start
 ```sh
 ./generate_https_certs.sh
 
 docker compose up
+
+
+minikube start
+
+cd kubernetes
+./apply.sh --ssl --replicas 2 --password secret
 ```

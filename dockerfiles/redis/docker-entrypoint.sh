@@ -5,6 +5,8 @@ CERT_DIR="/etc/redis/tls"
 CERT_FILE="$CERT_DIR/redis.crt"
 KEY_FILE="$CERT_DIR/redis.key"
 CA_CERT_FILE="$CERT_DIR/ca.crt"
+mkdir -p /data/log
+touch "/data/log/redis-command.log"
 
 if [ "$SSL" = "true" ]; then
   if [ ! -f "$CERT_FILE" ] || [ ! -f "$KEY_FILE" ] || [ ! -f "$CA_CERT_FILE" ]; then

@@ -1,6 +1,5 @@
 x-common-env: &common-env
   SSL: "true"
-  CERT_PATH: "/tls"
   REDIS_PASSWORD: "s3cr3t"
 
 services:
@@ -9,6 +8,7 @@ services:
       - internal-net
       - frontend-net
     environment:
+      CERT_PATH: "/tls"
       <<: *common-env
     build:
       context: .
@@ -25,6 +25,7 @@ services:
     volumes:
       - ./certs/redis-tls:/tls
     environment:
+      CERT_PATH: "/tls"
       <<: *common-env
     build:
       context: .
