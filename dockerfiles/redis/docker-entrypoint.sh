@@ -26,5 +26,14 @@ fi
 
 CMD_ARGS="$CMD_ARGS --protected-mode no"
 
+if [ -n "$DUMP_SCHEDULE" ]; then
+    echo "Setting up cron to run /dump.sh with schedule: $DUMP_SCHEDULE"
+
+    echo "$DUMP_SCHEDULE /dump.sh >> /data/log/cron.log 2>&1" > /etc/crontabs/root
+    mkdir -p /data/log
+    touch /data/log/cron.log
+    crond
+fi
+
 
 exec redis-server $CMD_ARGS

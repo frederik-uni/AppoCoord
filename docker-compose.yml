@@ -49,6 +49,7 @@ services:
       - server-2
   redis:
     environment:
+      DUMP_SCHEDULE: "* * * * *"
       <<: *common-env
     build:
       context: ./dockerfiles/redis
@@ -61,7 +62,7 @@ services:
       - ./redis_data:/data
       - ./certs/redis-tls:/etc/redis/tls
     healthcheck:
-      test: [ "CMD", "/healthcheck.sh"]
+      test: [ "CMD", "/redis-exec.sh", "ping"]
       interval: 1s
       timeout: 3s
       retries: 30
