@@ -35,4 +35,3 @@ build/
 /redis_data
 /src/main/resources/static
 certs
-kubernetes/temp-secrets.yml
