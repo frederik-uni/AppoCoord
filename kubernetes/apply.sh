@@ -61,7 +61,7 @@ print_help() {
 }
 
 REPLICAS=
-SSL_ENABLED=false
+SSL_ENABLED=true
 REDIS_PASSWORD=
 SERVER_NAME="localhost"
 
@@ -70,11 +70,6 @@ while [[ "$#" -gt 0 ]]; do
     --replicas)
       REPLICAS="$2"
       shift 2
-      ;;
-    --ssl)
-      # shellcheck disable=SC2034
-      SSL_ENABLED=true
-      shift
       ;;
     --password)
       # shellcheck disable=SC2034
@@ -99,13 +94,13 @@ done
 
 if [[ -z "$REPLICAS" ]]; then
   echo "Error: --replicas flag is required."
-  echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>]"
+  echo "Usage: $0 --replicas <number> [--cert <path>] [--password <string>]"
   exit 1
 fi
 
 if [[ -z "$REDIS_PASSWORD" ]]; then
   echo "Error: --password flag is required."
-  echo "Usage: $0 --password <string> [--replicas <number>] [--ssl] [--cert <path>]"
+  echo "Usage: $0 --password <string> [--replicas <number>] [--cert <path>]"
   exit 1
 fi
 
@@ -114,18 +109,24 @@ eval $(minikube docker-env)
 docker build -t my-local-server:latest ..
 docker build -t my-local-redis:latest ../dockerfiles/redis
 
-minikube mount ../certs:/certs &
 kubectl apply -f namespace.yml
+minikube mount ../certs:/certs &
 envsubst < secrets.yml | kubectl apply -f -
 kubectl apply -f persistent-volumes.yml
 kubectl apply -f redis-deployment.yml
 yq e "select(documentIndex == 0) | .spec.replicas = $REPLICAS" servers-deployment.yml | kubectl apply -f -
 kubectl apply -f servers-deployment.yml
-kubectl apply -f nginx-configmap.yml
+
+kubectl create secret tls tls-secret \
+  --cert=/certs/https/fullchain.pem \
+  --key=/certs/https/privkey.pem \
+  -n appocoord
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 kubectl apply -f nginx-deployment.yml
-kubectl wait --for=condition=Ready pod -l app=nginx -n appocoord --timeout=120s
-kubectl port-forward -n appocoord svc/nginx 9090:80 &
-kubectl port-forward -n appocoord svc/nginx 9091:443 &
+kubectl wait --for=condition=Ready pod -l app=ingress-nginx -n appocoord --timeout=120s
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9090:80 &
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9091:443 &
 MINIKUBE_IP=127.0.0.1
 HTTP_PORT=9090
 HTTPS_PORT=9091

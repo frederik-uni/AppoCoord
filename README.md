@@ -22,7 +22,7 @@ additional suggestions.
 ## Info
 
 The frontend uses FingerprintJS for browser fingerprinting, so testing it on a single machine requires multiple
-browsers.
+browsers. If you are testing the ui please be aware that this project uses the default input component and that each browser might work a bit differently. for example Safari displays default values for date input, while the input is actually empty, so the validation will fail.
 
 ## Images
 
@@ -54,7 +54,7 @@ browsers.
 docker compose up
 
 
-minikube start
+minikube start --driver=docker
 
 cd kubernetes
 ./apply.sh --ssl --replicas 2 --password secret
