@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: redis
   namespace: appocoord
 spec:
+  serviceName: redis
   replicas: 1
   selector:
     matchLabels:
@@ -55,13 +56,19 @@ spec:
 #            timeoutSeconds: 3
 #            failureThreshold: 30
       volumes:
-        - name: redis-data
-          persistentVolumeClaim:
-            claimName: redis-data-pvc
         - name: redis-tls
           hostPath:
             path: /certs/redis-tls
             type: Directory
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -69,6 +76,7 @@ metadata:
   name: redis
   namespace: appocoord
 spec:
+  clusterIP: None
   ports:
     - port: 6379
       targetPort: 6379

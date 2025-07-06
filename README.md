@@ -24,6 +24,7 @@ additional suggestions.
 The frontend uses FingerprintJS for browser fingerprinting, so testing it on a single machine requires multiple
 browsers. If you are testing the ui please be aware that this project uses the default input component and that each browser might work a bit differently. for example Safari displays default values for date input, while the input is actually empty, so the validation will fail.
 
+Generic Containers were published using `./dockerfiles/publish.sh`
 ## Images
 
 ### Create/Reply
@@ -48,14 +49,20 @@ browsers. If you are testing the ui please be aware that this project uses the d
 - envsubst
 
 ## Start
+`chmod +x {script_name}` may be required
 ```sh
+# https certs
 ./generate_https_certs.sh
 
+# docker
 docker compose up
 
-
-minikube start --driver=docker
-
-cd kubernetes
+# kubernetes
+cd k8n
+# minikube start+docker build
+./build.sh
+# start
 ./apply.sh --ssl --replicas 2 --password secret
+# stop
+./kill
 ```

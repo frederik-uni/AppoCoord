@@ -104,15 +104,9 @@ if [[ -z "$REDIS_PASSWORD" ]]; then
   exit 1
 fi
 
-# shellcheck disable=SC2046
-eval $(minikube docker-env)
-docker build -t my-local-server:latest ..
-docker build -t my-local-redis:latest ../dockerfiles/redis
-
 kubectl apply -f namespace.yml
 minikube mount ../certs:/certs &
 envsubst < secrets.yml | kubectl apply -f -
-kubectl apply -f persistent-volumes.yml
 kubectl apply -f redis-deployment.yml
 yq e "select(documentIndex == 0) | .spec.replicas = $REPLICAS" servers-deployment.yml | kubectl apply -f -
 kubectl apply -f servers-deployment.yml
@@ -121,9 +115,8 @@ kubectl create secret tls tls-secret \
   --cert=/certs/https/fullchain.pem \
   --key=/certs/https/privkey.pem \
   -n appocoord
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
-helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
-kubectl apply -f nginx-deployment.yml
+
+kubectl apply -f ingres.yml
 kubectl wait --for=condition=Ready pod -l app=ingress-nginx -n appocoord --timeout=120s
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9090:80 &
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9091:443 &
