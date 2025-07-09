@@ -2,14 +2,12 @@
 
 USERNAME="frederikuni"
 
-docker build -t $USERNAME/amazoncorretto24-alpine:latest -f java/Dockerfile .
-docker push $USERNAME/amazoncorretto24-alpine:latest
+docker buildx create --use --name multiarch-builder 2>/dev/null || docker buildx use multiarch-builder
+docker buildx inspect --bootstrap
 
-docker build -t $USERNAME/pnpm-alpine:latest -f pnpm/Dockerfile .
-docker push $USERNAME/pnpm-alpine:latest
+PLATFORMS="linux/amd64,linux/arm64"
 
-docker build -t $USERNAME/maven-amazoncorretto24-alpine:latest -f maven/Dockerfile .
-docker push $USERNAME/maven-amazoncorretto24-alpine:latest
-
-docker build -t $USERNAME/nginx-alpine:latest -f nginx/Dockerfile .
-docker push $USERNAME/nginx-alpine:latest
+docker buildx build --platform $PLATFORMS -t $USERNAME/amazoncorretto24-alpine:latest -f java/Dockerfile --push .
+docker buildx build --platform $PLATFORMS -t $USERNAME/pnpm-alpine:latest -f pnpm/Dockerfile --push .
+docker buildx build --platform $PLATFORMS -t $USERNAME/maven-amazoncorretto24-alpine:latest -f maven/Dockerfile --push .
+docker buildx build --platform $PLATFORMS -t $USERNAME/nginx-alpine:latest -f nginx/Dockerfile --push .
