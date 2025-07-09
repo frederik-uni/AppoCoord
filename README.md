@@ -32,7 +32,7 @@ cd k8s
 # minikube start+docker build
 ./build.sh
 # start + minikube tunnel
-./apply.sh --ssl --replicas 2 --password secret
+./apply.sh --replicas 2 --password secret
 # stop
 ./kill
 ```
