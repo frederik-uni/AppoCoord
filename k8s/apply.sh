@@ -118,12 +118,4 @@ kubectl create secret tls tls-secret \
 
 kubectl apply -f ingres.yml
 kubectl wait --for=condition=Ready pod -l app=ingress-nginx -n appocoord --timeout=120s
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9090:80 &
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 9091:443 &
-MINIKUBE_IP=127.0.0.1
-HTTP_PORT=9090
-HTTPS_PORT=9091
-
-echo "Access your web server at:"
-echo "  http://$MINIKUBE_IP:$HTTP_PORT"
-echo "  https://$MINIKUBE_IP:$HTTPS_PORT"
+minikube tunnel

@@ -9,11 +9,38 @@ appointment suggestions. So the controls for those three suggestions can be plac
 the page to create a new appointment coordination. There is no need to allow to dynamically add
 additional suggestions.
 
+## Requirements
+- openssl
+- docker/docker-compose
+- minikube
+- kubectl
+- yq
+- /bin/bash
+- envsubst
+
+## Start
+`chmod +x {script_name}` may be required
+```sh
+# https certs
+./generate_https_certs.sh
+
+# docker
+docker compose up
+
+# kubernetes
+cd k8s
+# minikube start+docker build
+./build.sh
+# start + minikube tunnel
+./apply.sh --ssl --replicas 2 --password secret
+# stop
+./kill
+```
+
+
 ## Defaults
-
-### Port
-
-- 9090
+- http://127.0.0.1:9090
+- https://127.0.0.1:9091
 
 ### Api docs
 
@@ -39,30 +66,14 @@ Generic Containers were published using `./dockerfiles/publish.sh`
   <img src="https://github.com/user-attachments/assets/23c91f6c-47a7-44f3-86cd-9ae8b86dcb70" style="width: 49%;" alt="Info">
 </div>
 
-## Requirements
-- openssl
-- docker/docker-compose
-- minikube
-- kubectl
-- yq
-- /bin/bash
-- envsubst
 
-## Start
-`chmod +x {script_name}` may be required
-```sh
-# https certs
-./generate_https_certs.sh
-
-# docker
-docker compose up
-
-# kubernetes
-cd k8n
-# minikube start+docker build
-./build.sh
-# start
-./apply.sh --ssl --replicas 2 --password secret
-# stop
-./kill
-```
+## Essential Paths and files
+- `src/main/java/com/frederik/appocoord` folder => backend code
+- `pom.xml` file => backend project file
+- `Dockerfile` file => backend docker file
+- `docker-compose.yml` file => service docker compose file
+- `k8s` folder => kubernetes 
+- `dockerfiles` folder => every dockerfile except backend
+- `frontend` folder => frontend code/workspace
+- `nginx/nginx.conf` file => nginx config(only used with docker compose)
+- `generate_https_certs.sh` file => generate certs for https
