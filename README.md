@@ -117,7 +117,7 @@ CPU: AMD Ryzen 5 3600X (12) @ 4.64 GHz
 GPU: NVIDIA GeForce RTX 2060 12GB [Discrete]
 
 Info:
-- minikube tunnel logs the ip. I decided against adding `/etc/hosts` as it is simpler for testing purposos to just use the logged ip and its not needed for macos. It wouldnt be hard to add it to the `/etc/hosts`: `192.168.49.2  myproject.local`, but i dont see a reason 2 do so
+- minikube tunnel logs the ip. I decided against adding `/etc/hosts` as it is simpler for testing purposos to just use the logged ip and its not needed for macos. It wouldnt be hard to add it to the `/etc/hosts`: `192.168.49.2  myproject.local`, but i dont see a reason 2 do so. The host can be defined in ingres.yml, bu isnt so its reachable via the ip
 Warning:
 - `kubectl create secret tls` behaves differntly on macos/linux. it works on both of my machines right now
 ```
