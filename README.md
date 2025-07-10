@@ -31,6 +31,7 @@ docker compose up
 # kubernetes
 cd k8s
 # minikube start+docker build
+# make sure you run minikube delete before running build if minikube is still running
 ./build.sh
 # start + minikube tunnel
 ./apply.sh --replicas 2 --password secret
@@ -74,6 +75,8 @@ The ip would be `192.168.49.2`
 
 The frontend uses FingerprintJS for browser fingerprinting, so testing it on a single machine requires multiple
 browsers. If you are testing the ui please be aware that this project uses the default input component and that each browser might work a bit differently. for example Safari displays default values for date input, while the input is actually empty, so the validation will fail.
+
+After creating a poll you will be redirected to the info/vote page. The page changes depending on creator, and if the time to vote is passed. After you were redirected you can just copy the url and share it.
 
 Generic Containers were published using `./dockerfiles/publish.sh`
 ## Images
