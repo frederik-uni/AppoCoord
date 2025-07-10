@@ -105,17 +105,16 @@ if [[ -z "$REDIS_PASSWORD" ]]; then
 fi
 
 kubectl apply -f namespace.yml
-minikube mount ../certs:/certs &
 envsubst < secrets.yml | kubectl apply -f -
 kubectl apply -f redis-deployment.yml
 yq e "select(documentIndex == 0) | .spec.replicas = $REPLICAS" servers-deployment.yml | kubectl apply -f -
 kubectl apply -f servers-deployment.yml
-
+kubectl get secret tls-secret -n appocoord &> /dev/null && \
+kubectl delete secret tls-secret -n appocoord
 kubectl create secret tls tls-secret \
-  --cert=/certs/https/fullchain.pem \
-  --key=/certs/https/privkey.pem \
+  --cert=$(pwd)/../certs/https/fullchain.pem \
+  --key=$(pwd)/../certs/https/privkey.pem \
   -n appocoord
 
 kubectl apply -f ingres.yml
-kubectl wait --for=condition=Ready pod -l app=ingress-nginx -n appocoord --timeout=120s
 minikube tunnel

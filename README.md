@@ -12,9 +12,10 @@ additional suggestions.
 ## Requirements
 - openssl
 - docker/docker-compose
+- docker buildx(maybe not needed, but docker compose warns that it wasnt found)
 - minikube
 - kubectl
-- yq
+- yq(use version >=4.46)
 - /bin/bash
 - envsubst
 
@@ -38,9 +39,32 @@ cd k8s
 ```
 
 
-## Defaults
+## Defaults Docker
 - http://127.0.0.1:9090
 - https://127.0.0.1:9091
+
+## Defaults kubernetes
+### MacOS
+- http://127.0.0.1
+- https://127.0.0.1
+
+### Linux
+The ip is logged by minikube tunnel at Status -> route
+Example:
+```
+Status:
+	machine: minikube
+	pid: 68016
+	route: 10.96.0.0/12 -> 192.168.49.2
+	minikube: Running
+	services: []
+    errors:
+```
+
+The ip would be `192.168.49.2`
+
+- http://{ip}
+- https://{ip}
 
 ### Api docs
 
@@ -72,8 +96,23 @@ Generic Containers were published using `./dockerfiles/publish.sh`
 - `pom.xml` file => backend project file
 - `Dockerfile` file => backend docker file
 - `docker-compose.yml` file => service docker compose file
-- `k8s` folder => kubernetes 
+- `k8s` folder => kubernetes
 - `dockerfiles` folder => every dockerfile except backend
 - `frontend` folder => frontend code/workspace
 - `nginx/nginx.conf` file => nginx config(only used with docker compose)
 - `generate_https_certs.sh` file => generate certs for https
+
+## Tested on
+```
+OS: Arch Linux x86_64
+Kernel: Linux 6.15.5-arch1-1
+Memory: 62.7 GiB
+WM:  Hyprland 0.49.0 (Wayland)
+CPU: AMD Ryzen 5 3600X (12) @ 4.64 GHz
+GPU: NVIDIA GeForce RTX 2060 12GB [Discrete]
+
+Info:
+- minikube tunnel logs the ip. I decided against adding `/etc/hosts` as it is simpler for testing purposos to just use the logged ip and its not needed for macos
+Issue:
+- `kubectl create secret tls` uses host path on linux/arch while macos uses the minikube env. This seems to be inconsitent across operating systems. In case it does not work on your machine try changing `$(pwd)/../certs/` to `/certs` in `apply.sh`.
+```

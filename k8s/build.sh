@@ -12,7 +12,7 @@ check_command docker
 check_command minikube
 
 minikube delete
-minikube start --driver=docker --addons=ingress
+minikube start --driver=docker --addons=ingress --mount --mount-string="$(pwd)/../certs:/certs"
 # shellcheck disable=SC2046
 eval $(minikube docker-env)
 docker build -t my-local-server:latest ..
