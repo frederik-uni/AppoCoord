@@ -116,4 +116,3 @@ kubectl create secret tls tls-secret \
   -n appocoord
 
 kubectl apply -f ingres.yml
-minikube tunnel

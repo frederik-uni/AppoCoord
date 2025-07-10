@@ -35,6 +35,10 @@ cd k8s
 ./build.sh
 # start + minikube tunnel
 ./apply.sh --replicas 2 --password secret
+
+# use sudo if needed
+minikube tunnel
+
 # stop
 ./kill
 ```
