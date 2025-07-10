@@ -102,7 +102,12 @@ Generic Containers were published using `./dockerfiles/publish.sh`
 - `nginx/nginx.conf` file => nginx config(only used with docker compose)
 - `generate_https_certs.sh` file => generate certs for https
 
-## Tested on
+## Tested
+### What
+- docker compose up
+- minikube 
+
+### Where
 ```
 OS: Arch Linux x86_64
 Kernel: Linux 6.15.5-arch1-1
@@ -113,6 +118,13 @@ GPU: NVIDIA GeForce RTX 2060 12GB [Discrete]
 
 Info:
 - minikube tunnel logs the ip. I decided against adding `/etc/hosts` as it is simpler for testing purposos to just use the logged ip and its not needed for macos
-Issue:
-- `kubectl create secret tls` uses host path on linux/arch while macos uses the minikube env. This seems to be inconsitent across operating systems. In case it does not work on your machine try changing `$(pwd)/../certs/` to `/certs` in `apply.sh`.
+Warning:
+- `kubectl create secret tls` behaves differntly on macos/linux. it works on both of my machines right now
+```
+
+```
+OS: macOS 15.5.0
+Memory: 24 GiB
+Architecture: aarch64
+CPU/GPU: Apple M2
 ```

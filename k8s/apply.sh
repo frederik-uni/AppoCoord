@@ -50,11 +50,10 @@ check_command envsubst
 #todo: check if docker is running or minikube start
 
 print_help() {
-  echo "Usage: $0 --replicas <number> [--ssl] [--cert <path>] [--password <string>] [--server-name <string>] [-h|--help]"
+  echo "Usage: $0 --replicas <number> [--cert <path>] [--password <string>] [--server-name <string>] [-h|--help]"
   echo
   echo "Options:"
   echo "  --replicas <number>    Number of replicas to set (required)"
-  echo "  --ssl                  Enable SSL (sets SSL to true in secrets)"
   echo "  --password <string>    Redis password (if not set, omitted from secrets)"
   echo "  --server-name <string> Nginx server name [default: localhost]"
   echo "  -h, --help             Show this help message and exit"
